@@ -1,0 +1,83 @@
+﻿<div id="home" class="content-card active">
+    <h2 class="content-title">Dashboard Overview</h2>
+
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.TotalRequests ?? 0)</div>
+            <div class="stat-label">Total Requests</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.PendingRequests ?? 0)</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.ApprovedRequests ?? 0)</div>
+            <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.FulfilledRequests ?? 0)</div>
+            <div class="stat-label">Fulfilled</div>
+        </div>
+    </div>
+
+    <div class="action-cards">
+        <div class="action-card card-food" onclick="showSection({currentTarget: document.querySelectorAll('.nav-link')[2]}, 'food')">
+            <div class="card-icon">🍲</div>
+            <h3>Request Food</h3>
+            <p>Get food assistance for your family</p>
+        </div>
+        <div class="action-card card-clothes" onclick="showSection({currentTarget: document.querySelectorAll('.nav-link')[3]}, 'clothes')">
+            <div class="card-icon">👕</div>
+            <h3>Request Clothes</h3>
+            <p>Get clothing for family members</p>
+        </div>
+        <div class="action-card card-loan" onclick="showSection({currentTarget: document.querySelectorAll('.nav-link')[4]}, 'loan')">
+            <div class="card-icon">💰</div>
+            <h3>Request Loan</h3>
+            <p>Get financial assistance</p>
+        </div>
+        <div class="action-card card-shelter" onclick="showSection({currentTarget: document.querySelectorAll('.nav-link')[5]}, 'shelter')">
+            <div class="card-icon">🏠</div>
+            <h3>Request Shelter</h3>
+            <p>Get temporary housing support</p>
+        </div>
+    </div>
+
+    @if (ViewBag.RequestHistory != null && ((List<object>)ViewBag.RequestHistory).Count > 0)
+    {
+        <div class="recent-donations">
+            <h3>Recent Requests</h3>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in ((List<object>)ViewBag.RequestHistory).Take(5))
+                    {
+                        var r = (dynamic)request;
+                        var statusClass = "status-" + r.Status.ToString().ToLower();
+                        <tr>
+                            <td>@r.Date</td>
+                            <td>@r.Type</td>
+                            <td>@r.Details</td>
+                            <td><span class="status-badge @statusClass">@r.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">📋</div>
+            <h3>No Requests Yet</h3>
+            <p>Start by making your first request for assistance</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,35 @@
+﻿@* Hidden markers for JavaScript animation detection - MUST BE AT TOP *@
+@if (TempData["Success"] != null)
+{
+    <div data-success-message="@TempData["Success"]" style="display:none;"></div>
+}
+@if (TempData["Error"] != null)
+{
+    <div data-error-type="@TempData["ErrorType"]" data-error-message="@TempData["Error"]" style="display:none;"></div>
+}
+
+@{
+    ViewData["Title"] = "NGO Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/NGODashboard.css" />
+
+<div class="dashboard-wrapper">
+    <div>
+        @await Html.PartialAsync("_NGOSidebar")
+    </div>
+    <div class="main-content">
+        @await Html.PartialAsync("_NGOHeader")
+
+        <div id="tabs">
+            @await Html.PartialAsync("_NGOHomeTab")
+            @await Html.PartialAsync("_NGODonateTab")
+            @await Html.PartialAsync("_NGORequestsTab")
+            @await Html.PartialAsync("_NGOHistoryTab")
+            @await Html.PartialAsync("_NGOProfileTab")
+            @await Html.PartialAsync("_NGOAboutTab")
+        </div>
+    </div>
+</div>
+
+<script src="~/js/NGODashboard.js"></script>

@@ -1,0 +1,22 @@
+﻿<div id="shelter" class="content-card">
+    <h2 class="content-title">Request Shelter Assistance</h2>
+    <form action="@Url.Action("RequestShelter", "Receiver")" method="post" class="request-form" id="shelterRequestForm">
+        <div class="form-group">
+            <label class="label-duration">Duration (Days) *</label>
+            <input type="number" name="DurationDays" id="shelterDuration" min="1" required placeholder="How many days do you need shelter?" />
+            <small style="color: var(--muted); font-size: 12px;">Available capacity: @ViewBag.ShelterAvailable spaces</small>
+        </div>
+
+        <div class="form-group">
+            <label class="label-shelter">Required Rooms *</label>
+            <input type="number" name="RequiredRooms" id="requiredRooms" min="1" required placeholder="Number of rooms needed" />
+        </div>
+
+        <div class="form-group">
+            <label class="label-reason">Explanation of Need *</label>
+            <textarea name="Description" rows="4" required placeholder="Explain your current situation and why you need shelter assistance..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Shelter Request</button>
+    </form>
+</div>

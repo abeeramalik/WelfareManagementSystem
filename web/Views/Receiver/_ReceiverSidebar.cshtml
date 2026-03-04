@@ -1,0 +1,74 @@
+﻿<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>🌟 Welfare Portal</h2>
+        <p>We're Here to Help</p>
+    </div>
+
+    <div class="user-profile">
+        <div class="user-avatar">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Avatar" />
+        </div>
+        <div class="user-name">@ViewBag.FullName</div>
+        <div class="user-type">
+            <span>🤲</span>
+            <span>Receiver Account</span>
+        </div>
+    </div>
+
+    <ul class="nav-menu">
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link active" onclick="showSection(event,'home')">
+                <span class="nav-icon">🏠</span>
+                Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'profile')">
+                <span class="nav-icon">👤</span>
+                My Profile
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'food')">
+                <span class="nav-icon">🍲</span>
+                Request Food
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'clothes')">
+                <span class="nav-icon">👕</span>
+                Request Clothes
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'loan')">
+                <span class="nav-icon">💰</span>
+                Request Loan
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'shelter')">
+                <span class="nav-icon">🏠</span>
+                Request Shelter
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'history')">
+                <span class="nav-icon">📊</span>
+                My Requests
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="showSection(event,'about')">
+                <span class="nav-icon">ℹ️</span>
+                About Us
+            </a>
+        </li>
+    </ul>
+
+    <div class="logout-section">
+        <a href="@Url.Action("Logout", "UserLogin")" class="logout-btn">
+            🚪 Logout
+        </a>
+    </div>
+</div>

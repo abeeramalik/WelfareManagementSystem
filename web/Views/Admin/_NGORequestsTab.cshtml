@@ -1,0 +1,289 @@
+﻿<!-- NGO Requests Tab -->
+<div id="ngo-requests" class="content-card">
+    <div class="section-header">
+        <h2 class="content-title">📤 NGO Support Requests</h2>
+        <button class="add-button" onclick="openModal('ngoRequestModal')">
+            ➕ Request Support from NGO
+        </button>
+    </div>
+
+    <p style="color: var(--muted); margin-bottom: 20px; font-size: 15px;">
+        Request additional resources from verified NGO partners when welfare fund needs support
+    </p>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="ngoRequestSearch"
+               placeholder="🔍 Search requests by NGO name, type, or status..."
+               onkeyup="searchTable('ngoRequestSearch', 'ngoRequestsTable')">
+    </div>
+
+    @if (ViewBag.NGORequests != null && ViewBag.NGORequests.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="ngoRequestsTable">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>NGO Partner</th>
+                        <th>Type</th>
+                        <th>Request Date</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                        <th>Response Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic request in ViewBag.NGORequests)
+                    {
+                        <tr>
+                            <td><strong>#@request.RequestId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@request.NgoName</strong>
+                                <br>
+                                <small style="color: var(--muted);">NGO ID: @request.NgoId</small>
+                            </td>
+                            <td>
+                                @if (request.RequestType == "Financial")
+                                {
+                                    <span style="font-size: 24px;">💰</span>
+                                }
+                                else if (request.RequestType == "Food")
+                                {
+                                    <span style="font-size: 24px;">🍲</span>
+                                }
+                                else if (request.RequestType == "Clothes")
+                                {
+                                    <span style="font-size: 24px;">👕</span>
+                                }
+                                else if (request.RequestType == "Shelter")
+                                {
+                                    <span style="font-size: 24px;">🏠</span>
+                                }
+                                <br>
+                                <strong>@request.RequestType</strong>
+                            </td>
+                            <td>@request.RequestDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <div style="max-width: 300px;">
+                                    <p style="margin-bottom: 8px; color: var(--text-dark);"><strong>@request.Description</strong></p>
+                                    @if (request.RequestType == "Financial" && request.RequestedAmount > 0)
+                                    {
+                                        <p style="color: var(--accent-start); font-weight: 600; font-size: 16px;">
+                                            💰 Amount: <strong>PKR @request.RequestedAmount.ToString("N0")</strong>
+                                        </p>
+                                    }
+                                    @if (request.RequestType == "Food" && request.FoodQuantity != null && request.FoodQuantity > 0)
+                                    {
+                                        <p style="color: var(--accent-start); font-weight: 600; font-size: 16px;">
+                                            🍲 Quantity: <strong>@request.FoodQuantity units</strong>
+                                        </p>
+                                    }
+                                    @if (request.RequestType == "Clothes")
+                                    {
+                                        <p style="color: var(--accent-start); font-weight: 600; font-size: 14px;">
+                                            @if (request.MaleClothesQuantity > 0)
+                                            {
+                                                <span>👔 Male: <strong>@request.MaleClothesQuantity</strong></span>
+                                            }
+                                            @if (request.FemaleClothesQuantity > 0)
+                                            {
+                                                <span style="margin-left: 10px;">👗 Female: <strong>@request.FemaleClothesQuantity</strong></span>
+                                            }
+                                            @if (request.KidsClothesQuantity > 0)
+                                            {
+                                                <span style="margin-left: 10px;">👶 Kids: <strong>@request.KidsClothesQuantity</strong></span>
+                                            }
+                                        </p>
+                                    }
+                                    @if (request.RequestType == "Shelter" && request.ShelterBeds != null && request.ShelterBeds > 0)
+                                    {
+                                        <p style="color: var(--accent-start); font-weight: 600; font-size: 16px;">
+                                            🏠 Beds: <strong>@request.ShelterBeds</strong>
+                                        </p>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                @if (request.Status == "Pending")
+                                {
+                                    <span class="status-badge status-pending">⏳ Pending</span>
+                                }
+                                else if (request.Status == "Accepted")
+                                {
+                                    <span class="status-badge status-approved">✓ Accepted</span>
+                                }
+                                else if (request.Status == "Fulfilled")
+                                {
+                                    <span class="status-badge status-fulfilled">✅ Fulfilled</span>
+                                }
+                                else if (request.Status == "Rejected")
+                                {
+                                    <span class="status-badge status-rejected">✗ Rejected</span>
+                                }
+                                else if (request.Status == "Cancelled")
+                                {
+                                    <span class="status-badge status-cancelled">❌ Cancelled</span>
+                                }
+                            </td>
+                            <td>
+                                @if (request.ResponseDate != null)
+                                {
+                                    @(request.ResponseDate?.ToString("dd MMM yyyy") ?? "-")
+                                         }                      
+                                else
+                                {
+                                    <span style="color: var(--muted);">-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (request.Status == "Pending")
+                                {
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="cancelNGORequest(@request.RequestId)">
+                                        ✗ Cancel
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span style="color: var(--muted); font-size: 12px;">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">📤</div>
+            <h3>No NGO Requests Yet</h3>
+            <p>You haven't sent any support requests to NGO partners yet.</p>
+            <button class="add-button" onclick="openModal('ngoRequestModal')" style="margin-top: 20px;">
+                📤 Send Your First Request
+            </button>
+        </div>
+    }
+</div>
+
+<!-- NGO Request Modal -->
+<div id="ngoRequestModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); align-items:center; justify-content:center; z-index:10000;">
+    <div style="background:white; padding:40px; width:90%; max-width:600px; border-radius:24px; box-shadow:0 25px 70px rgba(0,0,0,0.4); max-height:90vh; overflow-y:auto;">
+        <div class="modal-header">
+            <h2>📤 Request Support from NGO</h2>
+            <button type="button" class="close" onclick="closeModal('ngoRequestModal')">&times;</button>
+        </div>
+
+        <form method="post" action="/Admin/CreateNGORequest">
+            @Html.AntiForgeryToken()
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="NgoIdSelect">Select NGO Partner *</label>
+                    <select id="NgoIdSelect" name="NgoId" required class="form-control">
+                        <option value="">-- Select Verified NGO --</option>
+                        @if (ViewBag.VerifiedNGOs != null && ViewBag.VerifiedNGOs.Count > 0)
+                        {
+                            @foreach (dynamic ngo in ViewBag.VerifiedNGOs)
+                            {
+                                <option value="@ngo.NgoId">@ngo.OrganizationName (@ngo.City)</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="" disabled>No verified NGOs available</option>
+                        }
+                    </select>
+                    <small style="color: var(--muted); font-size: 12px; display:block; margin-top:5px;">
+                        @if (ViewBag.VerifiedNGOs == null || ViewBag.VerifiedNGOs.Count == 0)
+                        {
+                            <span style="color: #dc3545;">⚠️ No verified and active NGOs found. Please add and verify NGOs first.</span>
+                        }
+                        else
+                        {
+                            <span>ℹ️ Only active and verified NGOs are shown (@ViewBag.VerifiedNGOs.Count available)</span>
+                        }
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="RequestTypeSelect">Request Type *</label>
+                    <select id="RequestTypeSelect" name="RequestType" required class="form-control" onchange="toggleNGOFields(this.value)">
+                        <option value="">-- Select Type --</option>
+                        <option value="Financial">💰 Financial Support</option>
+                        <option value="Food">🍲 Food Supplies</option>
+                        <option value="Clothes">👕 Clothing Items</option>
+                        <option value="Shelter">🏠 Shelter Beds</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="DescriptionText">Description / Reason *</label>
+                    <textarea id="DescriptionText" name="Description" required class="form-control" rows="4"
+                              placeholder="Explain why you need this support from the NGO..."></textarea>
+                </div>
+
+                <!-- Financial Field -->
+                <div id="financialField" class="form-group hidden">
+                    <label for="RequestedAmountInput">💰 Requested Amount (PKR) *</label>
+                    <input type="number" id="RequestedAmountInput" name="RequestedAmount" min="0" step="1000"
+                           class="form-control" placeholder="Enter amount needed (e.g., 50000)">
+                </div>
+
+                <!-- Food Field -->
+                <div id="foodField" class="form-group hidden">
+                    <label for="FoodQuantityInput">🍲 Food Quantity (units) *</label>
+                    <input type="number" id="FoodQuantityInput" name="FoodQuantity" min="1"
+                           class="form-control" placeholder="Number of food units needed (e.g., 100)">
+                </div>
+
+                <!-- Clothes Fields -->
+                <div id="clothesField" class="hidden">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="MaleClothesQtyInput">👔 Male Clothes</label>
+                            <input type="number" id="MaleClothesQtyInput" name="MaleClothesQuantity" min="0"
+                                   class="form-control" placeholder="Quantity">
+                        </div>
+                        <div class="form-group">
+                            <label for="FemaleClothesQtyInput">👗 Female Clothes</label>
+                            <input type="number" id="FemaleClothesQtyInput" name="FemaleClothesQuantity" min="0"
+                                   class="form-control" placeholder="Quantity">
+                        </div>
+                        <div class="form-group">
+                            <label for="KidsClothesQtyInput">👶 Kids Clothes</label>
+                            <input type="number" id="KidsClothesQtyInput" name="KidsClothesQuantity" min="0"
+                                   class="form-control" placeholder="Quantity">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shelter Field -->
+                <div id="shelterField" class="form-group hidden">
+                    <label for="ShelterBedsInput">🏠 Shelter Beds *</label>
+                    <input type="number" id="ShelterBedsInput" name="ShelterBeds" min="1"
+                           class="form-control" placeholder="Number of shelter beds needed">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('ngoRequestModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    📤 Send Request to NGO
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Hidden Form for Cancelling NGO Requests -->
+<form id="cancelForm" method="post" action="/Admin/CancelNGORequest" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="requestId" id="cancelReqId">
+</form>

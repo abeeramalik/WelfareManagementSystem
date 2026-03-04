@@ -1,0 +1,38 @@
+﻿<div id="history" class="content-card">
+    <h2 class="content-title">Your Donation History</h2>
+
+    @if (ViewBag.DonationHistory != null && ((List<object>)ViewBag.DonationHistory).Count > 0)
+    {
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var donation in (List<object>)ViewBag.DonationHistory)
+                {
+                    var d = (dynamic)donation;
+                    <tr>
+                        <td>@d.Date</td>
+                        <td>@d.Type</td>
+                        <td>@d.Description</td>
+                        <td><span class="status-badge status-completed">Completed</span></td>
+                        <td>@d.Details</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="no-history">
+            <p style="font-size: 18px; margin-bottom: 10px;">📦 No donations yet</p>
+            <p>Start making a difference by donating food, clothes, or money!</p>
+        </div>
+    }
+</div>

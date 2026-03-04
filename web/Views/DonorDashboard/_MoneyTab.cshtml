@@ -1,0 +1,62 @@
+﻿<div id="money" class="content-card">
+    <h2 class="content-title">Donate Money</h2>
+    <form action="/DonorDashboard/DonateMoneyAction" method="post" class="donation-form" id="moneyForm">
+
+        <div class="form-group">
+            <label>Amount (PKR) *</label>
+            <input type="number" name="Amount" id="moneyAmount" min="100" step="1" required placeholder="Enter amount (minimum PKR 100)" />
+            <span class="validation-error" id="amountError" style="color: #e74c3c; font-size: 13px; display: none;">Minimum amount is PKR 100</span>
+        </div>
+
+        <div class="form-group">
+            <label>Comments (Optional)</label>
+            <textarea name="Comments" rows="4" placeholder="Any special instructions or dedication..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="moneySubmitBtn">Donate Money</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Money tab script loaded');
+
+        const form = document.getElementById('moneyForm');
+        const submitBtn = document.getElementById('moneySubmitBtn');
+
+        if (form) {
+            console.log('Money form found');
+
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function(e) {
+                    console.log('Money submit button clicked!');
+                });
+            }
+
+            form.addEventListener('submit', function(e) {
+                console.log('=== MONEY FORM SUBMIT EVENT FIRED ===');
+
+                const amount = document.getElementById('moneyAmount').value;
+                const errorSpan = document.getElementById('amountError');
+
+                console.log('Amount:', amount);
+                console.log('Form action:', form.action);
+                console.log('Form method:', form.method);
+
+                if (!amount || parseFloat(amount) < 100) {
+                    e.preventDefault();
+                    errorSpan.style.display = 'block';
+                    alert('Minimum donation amount is PKR 100');
+                    console.log('BLOCKED: Amount less than 100');
+                    return false;
+                }
+
+                errorSpan.style.display = 'none';
+                console.log('✓ Validation passed - form SHOULD submit now!');
+                return true;
+            });
+        } else {
+            console.error('Money form NOT found!');
+        }
+    });
+</script>

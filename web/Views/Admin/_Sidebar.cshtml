@@ -1,0 +1,81 @@
+﻿<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>🏛️ Admin Panel</h2>
+        <p>Welfare Management System</p>
+    </div>
+
+    <div class="user-profile">
+        <div class="user-avatar">
+            <span style="font-size: 40px;">👨‍💼</span>
+        </div>
+        <div class="user-name">@ViewBag.AdminName</div>
+        <div class="user-type">
+            <span>🔑</span>
+            <span>Administrator</span>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" onclick="showSection(event, 'home')">
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'requests')">
+                    <span class="nav-icon">📋</span>
+                    <span>Requests</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'donations')">
+                    <span class="nav-icon">💝</span>
+                    <span>Donations</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'users')">
+                    <span class="nav-icon">👥</span>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'ngos')">
+                    <span class="nav-icon">🏢</span>
+                    <span>NGOs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'admins')">
+                    <span class="nav-icon">👨‍💼</span>
+                    <span>Admins</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'ngo-requests')">
+                    <span class="nav-icon">📤</span>
+                    <span>NGO Requests</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'transactions')">
+                    <span class="nav-icon">💳</span>
+                    <span>Transactions</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'about')">
+                    <span class="nav-icon">ℹ️</span>
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="logout-section">
+        <a href="/UserLogin/Logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</aside>

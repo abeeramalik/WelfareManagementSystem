@@ -1,0 +1,78 @@
+﻿<!-- Transactions/Disbursements Tab -->
+<div id="transactions" class="content-card">
+    <h2 class="content-title">💳 Welfare Disbursements</h2>
+
+    <p style="color: var(--muted); margin-bottom: 20px;">
+        Track all resources distributed from the welfare fund to receivers
+    </p>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="transactionSearch"
+               placeholder="🔍 Search transactions by receiver name, type, or date..."
+               onkeyup="searchTable('transactionSearch', 'transactionsTable')">
+    </div>
+
+    @if (ViewBag.RecentTransactions != null && ViewBag.RecentTransactions.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="transactionsTable">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Receiver Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic trans in ViewBag.RecentTransactions)
+                    {
+                        <tr>
+                            <td><strong>#@trans.TransactionId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@trans.ReceiverName</strong>
+                            </td>
+                            <td>
+                                @if (trans.Type == "Food")
+                                {
+                                    <span style="font-size: 18px;">🍲</span>
+                                }
+                                else if (trans.Type == "Clothes")
+                                {
+                                    <span style="font-size: 18px;">👕</span>
+                                }
+                                else if (trans.Type == "Loan")
+                                {
+                                    <span style="font-size: 18px;">💰</span>
+                                }
+                                else if (trans.Type == "Shelter")
+                                {
+                                    <span style="font-size: 18px;">🏠</span>
+                                }
+                                <br>
+                                <strong>@trans.Type</strong>
+                            </td>
+                            <td>@trans.Date</td>
+                            <td>@trans.Details</td>
+                            <td>
+                                <span class="status-badge status-completed">✓ Completed</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">💳</div>
+            <h3>No Transactions Yet</h3>
+            <p>Welfare disbursements to receivers will appear here</p>
+        </div>
+    }
+</div>

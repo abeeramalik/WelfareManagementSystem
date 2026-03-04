@@ -1,0 +1,174 @@
+﻿<div id="profile" class="content-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="content-title" style="margin-bottom: 0;">Your Profile Information</h2>
+        <button type="button" class="submit-btn" onclick="toggleEditMode()" id="editToggleBtn">
+            ✏️ Edit Profile
+        </button>
+    </div>
+
+    <!-- View Mode -->
+    <div id="profileViewMode">
+        <div class="profile-grid">
+            <div class="profile-item">
+                <label>User ID</label>
+                <span>@ViewBag.UserId</span>
+            </div>
+            <div class="profile-item">
+                <label>Full Name</label>
+                <span id="viewFullName">@ViewBag.FullName</span>
+            </div>
+            <div class="profile-item">
+                <label>Email</label>
+                <span id="viewEmail">@ViewBag.Email</span>
+            </div>
+            <div class="profile-item">
+                <label>Phone</label>
+                <span id="viewPhone">@ViewBag.Phone</span>
+            </div>
+            <div class="profile-item">
+                <label>CNIC</label>
+                <span>@ViewBag.CNIC</span>
+            </div>
+            <div class="profile-item">
+                <label>Date of Birth</label>
+                <span id="viewDateOfBirth">@ViewBag.DateOfBirth</span>
+            </div>
+            <div class="profile-item">
+                <label>Gender</label>
+                <span id="viewGender">@ViewBag.Gender</span>
+            </div>
+            <div class="profile-item">
+                <label>City</label>
+                <span id="viewCity">@ViewBag.City</span>
+            </div>
+            <div class="profile-item" style="grid-column: 1 / -1;">
+                <label>Address</label>
+                <span id="viewAddress">@ViewBag.Address</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div id="profileEditMode" style="display: none;">
+        <form action="@Url.Action("UpdateProfile", "Receiver")" method="post" class="request-form" id="profileUpdateForm">
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="FullName" id="editFullName" value="@ViewBag.FullName" required />
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="Email" id="editEmail" value="@ViewBag.Email" required />
+            </div>
+
+            <div class="form-group">
+                <label>Phone *</label>
+                <input type="tel" name="Phone" id="editPhone" value="@ViewBag.Phone" required pattern="[0-9]{11}" placeholder="03001234567" />
+                <small style="color: var(--muted); font-size: 12px;">Format: 11 digits (e.g., 03001234567)</small>
+            </div>
+
+            <div class="form-group">
+                <label>Date of Birth *</label>
+                @{
+                    string dobValue = "";
+                    if (ViewBag.DateOfBirth != null)
+                    {
+                        // ViewBag.DateOfBirth is already formatted as "MMM dd, yyyy" from controller
+                        // We need to parse it back to yyyy-MM-dd for the input field
+                        if (DateTime.TryParse(ViewBag.DateOfBirth.ToString(), out DateTime parsedDate))
+                        {
+                            dobValue = parsedDate.ToString("yyyy-MM-dd");
+                        }
+                    }
+                }
+                <input type="date" name="DateOfBirth" id="editDateOfBirth" value="@dobValue" required />
+            </div>
+
+            <div class="form-group">
+                <label>Gender *</label>
+                <select name="Gender" id="editGender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male" @(ViewBag.Gender == "Male" ? "selected" : "")>Male</option>
+                    <option value="Female" @(ViewBag.Gender == "Female" ? "selected" : "")>Female</option>
+                    <option value="Other" @(ViewBag.Gender == "Other" ? "selected" : "")>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>City *</label>
+                <input type="text" name="City" id="editCity" value="@ViewBag.City" required />
+            </div>
+
+            <div class="form-group">
+                <label>Address *</label>
+                <textarea name="Address" id="editAddress" rows="3" required>@ViewBag.Address</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>New Password (Optional)</label>
+                <input type="password" name="Password" id="editPassword" placeholder="Leave blank to keep current password" minlength="6" />
+                <small style="color: var(--muted); font-size: 12px;">Minimum 6 characters. Leave blank if you don't want to change password.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm New Password (Optional)</label>
+                <input type="password" name="ConfirmPassword" id="editConfirmPassword" placeholder="Re-enter new password" />
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="submit-btn">💾 Save Changes</button>
+                <button type="button" class="cancel-btn" onclick="toggleEditMode()">❌ Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleEditMode() {
+        const viewMode = document.getElementById('profileViewMode');
+        const editMode = document.getElementById('profileEditMode');
+        const toggleBtn = document.getElementById('editToggleBtn');
+
+        if (viewMode.style.display === 'none') {
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+            toggleBtn.innerHTML = '✏️ Edit Profile';
+        } else {
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+            toggleBtn.innerHTML = '👁️ View Profile';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('profileUpdateForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const phone = document.getElementById('editPhone').value;
+                if (phone.length !== 11 || !/^\d+$/.test(phone)) {
+                    e.preventDefault();
+                    alert('Phone number must be exactly 11 digits');
+                    return false;
+                }
+
+                const password = document.getElementById('editPassword').value;
+                const confirmPassword = document.getElementById('editConfirmPassword').value;
+
+                if (password || confirmPassword) {
+                    if (password !== confirmPassword) {
+                        e.preventDefault();
+                        alert('Passwords do not match');
+                        return false;
+                    }
+                    if (password.length < 6) {
+                        e.preventDefault();
+                        alert('Password must be at least 6 characters long');
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
+    });
+</script>

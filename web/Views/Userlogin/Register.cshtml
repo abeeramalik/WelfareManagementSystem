@@ -1,0 +1,464 @@
+﻿@model web.Models.UserLoginConfidentials
+@{
+    ViewData["Title"] = "Register";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success-fixed">@TempData["Success"]</div>
+}
+
+<div class="page-wrapper">
+    <div class="register-container">
+        <form asp-action="Register" method="post">
+            <h2>Create Account</h2>
+
+            @if (ViewData.ModelState.Any(x => x.Value.Errors.Count > 0) || ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @if (ViewBag.Error != null)
+                    {
+                        @ViewBag.Error
+                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var modelState in ViewData.ModelState.Values)
+                            {
+                                foreach (var error in modelState.Errors)
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            }
+                        </ul>
+                    }
+                </div>
+            }
+
+            <div class="input-group">
+                <label asp-for="UserId">User ID (6 digits)</label>
+                <input asp-for="UserId" type="number" placeholder="Enter 6-digit User ID" required min="100000" max="999999">
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="UserType">User Type</label>
+                <select asp-for="UserType" required>
+                    <option value="">Select Type</option>
+                    <option value="Donor">Donor</option>
+                    <option value="Receiver">Receiver</option>
+                </select>
+                <span asp-validation-for="UserType" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="FullName">Full Name</label>
+                <input asp-for="FullName" type="text" placeholder="Enter your full name" required pattern="[A-Za-z\s]+" title="Name should only contain letters and spaces">
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="CNIC">CNIC</label>
+                <input asp-for="CNIC" id="cnic" type="text" placeholder="_____ - _______ - _" maxlength="15" required>
+                <span asp-validation-for="CNIC" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" type="email" placeholder="Enter your email" required>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="PasswordHash">Password</label>
+                <input asp-for="PasswordHash" id="password" type="password" placeholder="Enter password (min 6 characters, 1 uppercase, 1 special char)" required minlength="6">
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="Phone">Phone</label>
+                <input asp-for="Phone" id="phone" type="text" placeholder="03__ - _______" maxlength="12" required>
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="DateOfBirth">Date of Birth</label>
+                <input asp-for="DateOfBirth" type="date" required>
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="Gender">Gender</label>
+                <select asp-for="Gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                    <option value="PreferNotToSay">Prefer Not to Say</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="Address">Address</label>
+                <input asp-for="Address" type="text" placeholder="Enter your address" required>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="input-group">
+                <label asp-for="City">City</label>
+                <input asp-for="City" type="text" placeholder="Enter your city" required>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <button type="submit">Register</button>
+
+            <div class="login-link">
+                Already have an account? <a asp-controller="UserLogin" asp-action="Index">Login here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        @* CNIC Auto Format: 32203-7723053-1 *@
+        document.getElementById('cnic').addEventListener('input', function (e) {
+            let cursorPosition = e.target.selectionStart;
+            let value = e.target.value.replace(/[^0-9]/g, '');
+
+            if (value.length > 13) {
+                value = value.substring(0, 13);
+            }
+
+            let formatted = '';
+
+            if (value.length > 0) {
+                formatted = value.substring(0, 5);
+            }
+
+            if (value.length >= 6) {
+                formatted += '-' + value.substring(5, 12);
+            }
+
+            if (value.length >= 13) {
+                formatted += '-' + value.substring(12, 13);
+            }
+
+            e.target.value = formatted;
+        });
+
+        @* Phone Auto Format: 0300-4140652 *@
+        document.getElementById('phone').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+
+            let formatted = '';
+
+            if (value.length > 0) {
+                formatted = value.substring(0, 4);
+            }
+
+            if (value.length >= 5) {
+                formatted += '-' + value.substring(4);
+            }
+
+            e.target.value = formatted;
+        });
+
+        @* Full Name validation - prevent numbers *@
+        document.querySelector('input[name="FullName"]').addEventListener('input', function (e) {
+            e.target.value = e.target.value.replace(/[0-9]/g, '');
+        });
+
+        @* Password validation on form submit *@
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const password = document.getElementById('password').value;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const specialCharRegex = /[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+            const hasSpecialChar = specialCharRegex.test(password);
+            const hasMinLength = password.length >= 6;
+
+            if (!hasUpperCase || !hasSpecialChar || !hasMinLength) {
+                e.preventDefault();
+
+                let errors = [];
+                if (!hasMinLength) errors.push('at least 6 characters');
+                if (!hasUpperCase) errors.push('at least one uppercase letter (A-Z)');
+                if (!hasSpecialChar) errors.push('at least one special character (!@@#$%^&*...)');
+
+                let message = 'Password must contain:\n' + errors.map(err => '• ' + err).join('\n');
+
+                const errorSpan = document.getElementById('password').nextElementSibling;
+                if (errorSpan && errorSpan.classList.contains('text-danger')) {
+                    errorSpan.innerHTML = errors.map(err => '• ' + err).join('<br>');
+                    errorSpan.style.display = 'block';
+                }
+
+                alert(message);
+                document.getElementById('password').focus();
+                return false;
+            }
+        });
+
+        @* Password validation feedback on input *@
+        document.getElementById('password').addEventListener('input', function (e) {
+            const password = e.target.value;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const specialCharRegex = /[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+            const hasSpecialChar = specialCharRegex.test(password);
+            const hasMinLength = password.length >= 6;
+
+            const errorSpan = e.target.nextElementSibling;
+            if (errorSpan && errorSpan.classList.contains('text-danger')) {
+                if (password.length > 0 && (!hasUpperCase || !hasSpecialChar || !hasMinLength)) {
+                    let errors = [];
+                    if (!hasMinLength) errors.push('• at least 6 characters');
+                    if (!hasUpperCase) errors.push('• at least one uppercase letter (A-Z)');
+                    if (!hasSpecialChar) errors.push('• at least one special character (!@@#$%^&*...)');
+
+                    errorSpan.innerHTML = errors.join('<br>');
+                    errorSpan.style.display = 'block';
+                } else if (hasUpperCase && hasSpecialChar && hasMinLength) {
+                    errorSpan.textContent = '';
+                    errorSpan.style.display = 'none';
+                }
+            }
+        });
+
+        @* Auto-hide success alert *@
+        setTimeout(() => {
+            const alert = document.querySelector('.alert-success-fixed');
+            if (alert) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 400);
+            }
+        }, 5000);
+    </script>
+}
+
+<style>
+    .page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        padding: 40px 20px;
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        color: #2d3436;
+    }
+
+    .register-container {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        width: 480px;
+        max-width: 95%;
+        padding: 50px 40px;
+        border-radius: 22px;
+        box-shadow: 0 20px 50px rgba(58, 123, 213, 0.3);
+        border: 1px solid rgba(103, 126, 234, 0.35);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            border-radius: 22px 22px 0 0;
+        }
+
+        .register-container h2 {
+            text-align: center;
+            margin: 0 0 38px 0;
+            font-size: 32px;
+            color: #667eea;
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+    .input-group {
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3436;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.4s ease;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+            .input-group input:focus,
+            .input-group select:focus {
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 8px 25px rgba(102, 126, 234, 0.2);
+                background: white;
+                transform: translateY(-2px);
+            }
+
+            .input-group input::placeholder {
+                color: #b2bec3;
+                font-style: italic;
+            }
+
+    .text-danger {
+        color: #e74c3c !important;
+        font-size: 12.5px;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 17px;
+        font-size: 18px;
+        font-weight: 700;
+        border: none;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        button[type="submit"]:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+    .login-link {
+        text-align: center;
+        margin-top: 30px;
+        color: #636e72;
+        font-size: 15px;
+    }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+            .login-link a:hover {
+                color: #764ba2;
+                text-decoration: underline;
+            }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #fee, #fdd);
+        color: #c33;
+        border: 1px solid #fcc;
+        border-left: 6px solid #e74c3c;
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        font-size: 14px;
+        animation: slideIn 0.3s ease-out;
+    }
+
+        .alert-danger ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .alert-danger li {
+            margin: 5px 0;
+        }
+
+    .alert-success-fixed {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 14px 20px;
+        border-radius: 10px;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        min-width: 320px;
+        max-width: 90%;
+        box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
+        animation: slideDown 0.5s ease-out;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    @@media (max-height: 850px), (max-width: 500px) {
+        .register-container {
+            padding: 40px 30px;
+        }
+
+            .register-container h2 {
+                font-size: 28px;
+            }
+    }
+</style>

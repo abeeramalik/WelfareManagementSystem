@@ -1,0 +1,31 @@
+﻿<div id="food" class="content-card">
+    <h2 class="content-title">Donate Food</h2>
+
+    <form action="/DonorDashboard/DonateFoodAction" method="post" id="foodForm">
+
+        <div class="form-group">
+            <label>Number of People to Feed *</label>
+            <div class="people-selector">
+                <button type="button" class="people-btn" data-value="5">5</button>
+                <button type="button" class="people-btn" data-value="10">10</button>
+                <button type="button" class="people-btn" data-value="20">20</button>
+                <button type="button" class="people-btn" data-value="50">50</button>
+                <button type="button" class="people-btn" data-value="100">100</button>
+            </div>
+            <input type="hidden" id="numberOfPeople" name="NumberOfPeople" value="0" required />
+            <span class="validation-error" id="peopleError" style="color: #e74c3c; font-size: 13px; display: none;">Please select number of people</span>
+        </div>
+
+        <div class="form-group">
+            <label>Description (Optional)</label>
+            <textarea name="Description" rows="3" placeholder="e.g., Cooked biryani, rice packets"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Pickup Date & Time *</label>
+            <input type="datetime-local" name="PickupDateTime" id="pickupDateTime" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Food Donation</button>
+    </form>
+</div>

@@ -1,0 +1,119 @@
+﻿<!-- Home/Dashboard Tab -->
+<div id="home" class="content-card active">
+    <h2 class="content-title">📊 NGO Dashboard Overview</h2>
+
+    <!-- Statistics Cards -->
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-icon">💝</div>
+            <div class="stat-number">@(ViewBag.TotalDonations ?? 0)</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">💰</div>
+            <div class="stat-number">PKR @(((decimal?)ViewBag.TotalMoneyDonated ?? 0).ToString("N0"))</div>
+            <div class="stat-label">Money Donated</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🍲</div>
+            <div class="stat-number">@(ViewBag.TotalFoodDonated ?? 0)</div>
+            <div class="stat-label">Food Units Donated</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">👕</div>
+            <div class="stat-number">@(ViewBag.TotalClothesDonated ?? 0)</div>
+            <div class="stat-label">Clothes Donated</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🏠</div>
+            <div class="stat-number">@(ViewBag.TotalShelterDonated ?? 0)</div>
+            <div class="stat-label">Shelter Beds</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">📨</div>
+            <div class="stat-number">@(ViewBag.PendingRequests ?? 0)</div>
+            <div class="stat-label">Pending Requests</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h3 style="color: var(--accent-start); margin: 40px 0 20px 0; font-size: 22px; font-weight: 700;">
+        ⚡ Quick Actions
+    </h3>
+    <div class="action-cards">
+        <div class="action-card card-donate-money" onclick="showSection(event, 'donate')">
+            <div class="card-icon">💰</div>
+            <h3>Donate Money</h3>
+            <p>Contribute financially to support welfare operations</p>
+        </div>
+
+        <div class="action-card card-donate-food" onclick="showSection(event, 'donate')">
+            <div class="card-icon">🍲</div>
+            <h3>Donate Food</h3>
+            <p>Provide food supplies for families in need</p>
+        </div>
+
+        <div class="action-card card-donate-clothes" onclick="showSection(event, 'donate')">
+            <div class="card-icon">👕</div>
+            <h3>Donate Clothes</h3>
+            <p>Donate clothing items for all age groups</p>
+        </div>
+
+        <div class="action-card card-donate-shelter" onclick="showSection(event, 'donate')">
+            <div class="card-icon">🏠</div>
+            <h3>Donate Shelter</h3>
+            <p>Provide shelter beds for homeless individuals</p>
+        </div>
+    </div>
+
+    <!-- Your Impact Section -->
+    <h3 style="color: var(--accent-start); margin: 40px 0 20px 0; font-size: 22px; font-weight: 700;">
+        🌟 Your Donation Impact
+    </h3>
+    <div style="padding: 30px; background: linear-gradient(135deg, #EBF4F5, #FFFFFF); border-radius: 15px; border: 1px solid #D6E9EA;">
+        <div class="profile-grid">
+            <div class="profile-item">
+                <label>💝 Total Contributions</label>
+                <span style="color: var(--accent-start); font-size: 24px; font-weight: 700;">@(ViewBag.TotalDonations ?? 0)</span>
+            </div>
+            <div class="profile-item">
+                <label>💰 Money Donated</label>
+                <span style="color: #28a745; font-size: 20px; font-weight: 600;">PKR @(((decimal?)ViewBag.TotalMoneyDonated ?? 0).ToString("N0"))</span>
+            </div>
+            <div class="profile-item">
+                <label>🍲 Food Units</label>
+                <span style="color: #667eea; font-size: 20px; font-weight: 600;">@(ViewBag.TotalFoodDonated ?? 0) units</span>
+            </div>
+            <div class="profile-item">
+                <label>👕 Clothes Items</label>
+                <span style="color: #e83e8c; font-size: 20px; font-weight: 600;">@(ViewBag.TotalClothesDonated ?? 0) items</span>
+            </div>
+            <div class="profile-item">
+                <label>🏠 Shelter Beds</label>
+                <span style="color: #764ba2; font-size: 20px; font-weight: 600;">@(ViewBag.TotalShelterDonated ?? 0) beds</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; text-align: center;">
+            <p style="color: white; font-size: 18px; font-weight: 600; margin: 0;">
+                🙏 Thank you for making a difference in people's lives!
+            </p>
+        </div>
+    </div>
+
+    <!-- Welfare Requests Summary -->
+    @if (ViewBag.PendingRequests > 0)
+    {
+        <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #FFF3CD, #FFE5A0); border-radius: 12px; border-left: 4px solid #ffc107;">
+            <h3 style="color: #856404; margin-bottom: 10px; font-size: 18px;">
+                📨 You have @ViewBag.PendingRequests pending welfare request(s)
+            </h3>
+            <p style="color: #856404; margin-bottom: 15px;">
+                The welfare administration has sent requests for support. Please review them.
+            </p>
+            <button class="btn btn-warning" onclick="showSection(event, 'requests')">
+                View Requests →
+            </button>
+        </div>
+    }
+</div>

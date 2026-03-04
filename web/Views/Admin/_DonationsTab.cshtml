@@ -1,0 +1,201 @@
+﻿<!-- Donations Tab -->
+<div id="donations" class="content-card">
+    <h2 class="content-title">💝 Donations Received</h2>
+
+    <div class="stats-card" style="margin-bottom: 30px;">
+        <div class="stat-item">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">@(ViewBag.TotalDonorDonations ?? 0)</div>
+            <div class="stat-label">Donor Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🏢</div>
+            <div class="stat-number">@(ViewBag.TotalNGODonations ?? 0)</div>
+            <div class="stat-label">NGO Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">💝</div>
+            <div class="stat-number">@(ViewBag.TotalDonations ?? 0)</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+    </div>
+
+    <!-- Tabs for Donor vs NGO Donations -->
+    <div style="margin-bottom: 20px;">
+        <button class="btn btn-primary" onclick="showDonationType('donor')" id="donorTabBtn">
+            👥 Donor Donations
+        </button>
+        <button class="btn btn-secondary" onclick="showDonationType('ngo')" id="ngoTabBtn" style="margin-left: 10px;">
+            🏢 NGO Donations
+        </button>
+    </div>
+
+    <!-- Donor Donations Section -->
+    <div id="donorDonationsSection">
+        <h3 style="color: var(--accent-start); margin-bottom: 15px;">👥 Individual Donor Donations</h3>
+
+        <div class="search-box">
+            <input type="text"
+                   id="donorDonationSearch"
+                   placeholder="🔍 Search donor donations..."
+                   onkeyup="searchTable('donorDonationSearch', 'donorDonationsTable')">
+        </div>
+
+        @if (ViewBag.DonorDonations != null && ViewBag.DonorDonations.Count > 0)
+        {
+            <div class="table-container">
+                <table class="history-table" id="donorDonationsTable">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Donor Name</th>
+                            <th>Donor ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (dynamic donation in ViewBag.DonorDonations)
+                        {
+                            <tr>
+                                <td><strong>#@donation.TransactionId</strong></td>
+                                <td>
+                                    <strong style="color: var(--accent-start);">@donation.DonorName</strong>
+                                </td>
+                                <td>
+                                    <span style="color: var(--muted); font-size: 13px;">ID: @donation.DonorId</span>
+                                </td>
+                                <td>
+                                    @if (donation.Type == "Food")
+                                    {
+                                        <span style="font-size: 18px;">🍲</span>
+                                    }
+                                    else if (donation.Type == "Clothes")
+                                    {
+                                        <span style="font-size: 18px;">👕</span>
+                                    }
+                                    else if (donation.Type == "Money")
+                                    {
+                                        <span style="font-size: 18px;">💰</span>
+                                    }
+                                    <br>
+                                    <strong>@donation.Type</strong>
+                                </td>
+                                <td>@donation.Date</td>
+                                <td>@donation.Details</td>
+                                <td>
+                                    <span class="status-badge status-completed">✓ Received</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-history">
+                <div class="empty-icon">👥</div>
+                <h3>No Donor Donations Yet</h3>
+                <p>Individual donor contributions will appear here</p>
+            </div>
+        }
+    </div>
+
+    <!-- NGO Donations Section -->
+    <div id="ngoDonationsSection" style="display: none;">
+        <h3 style="color: var(--accent-start); margin-bottom: 15px;">🏢 NGO Partner Donations</h3>
+
+        <div class="search-box">
+            <input type="text"
+                   id="ngoDonationSearch"
+                   placeholder="🔍 Search NGO donations..."
+                   onkeyup="searchTable('ngoDonationSearch', 'ngoDonationsTable')">
+        </div>
+
+        @if (ViewBag.NGODonations != null && ViewBag.NGODonations.Count > 0)
+        {
+            <div class="table-container">
+                <table class="history-table" id="ngoDonationsTable">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>NGO Name</th>
+                            <th>NGO ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (dynamic donation in ViewBag.NGODonations)
+                        {
+                            <tr>
+                                <td><strong>#@donation.TransactionId</strong></td>
+                                <td>
+                                    <strong style="color: var(--accent-start);">@donation.NGOName</strong>
+                                </td>
+                                <td>
+                                    <span style="color: var(--muted); font-size: 13px;">ID: @donation.NGOId</span>
+                                </td>
+                                <td>
+                                    @if (donation.Type == "Food")
+                                    {
+                                        <span style="font-size: 18px;">🍲</span>
+                                    }
+                                    else if (donation.Type == "Clothes")
+                                    {
+                                        <span style="font-size: 18px;">👕</span>
+                                    }
+                                    else if (donation.Type == "Money")
+                                    {
+                                        <span style="font-size: 18px;">💰</span>
+                                    }
+                                    <br>
+                                    <strong>@donation.Type</strong>
+                                </td>
+                                <td>@donation.Date</td>
+                                <td>@donation.Details</td>
+                                <td>
+                                    <span class="status-badge status-completed">✓ Received</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-history">
+                <div class="empty-icon">🏢</div>
+                <h3>No NGO Donations Yet</h3>
+                <p>NGO partner contributions will appear here</p>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function showDonationType(type) {
+        const donorSection = document.getElementById('donorDonationsSection');
+        const ngoSection = document.getElementById('ngoDonationsSection');
+        const donorBtn = document.getElementById('donorTabBtn');
+        const ngoBtn = document.getElementById('ngoTabBtn');
+
+        if (type === 'donor') {
+            donorSection.style.display = 'block';
+            ngoSection.style.display = 'none';
+            donorBtn.className = 'btn btn-primary';
+            ngoBtn.className = 'btn btn-secondary';
+        } else {
+            donorSection.style.display = 'none';
+            ngoSection.style.display = 'block';
+            donorBtn.className = 'btn btn-secondary';
+            ngoBtn.className = 'btn btn-primary';
+        }
+    }
+</script>

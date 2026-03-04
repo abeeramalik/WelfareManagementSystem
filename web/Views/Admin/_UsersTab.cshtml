@@ -1,0 +1,104 @@
+﻿<!-- Users Management Tab -->
+<div id="users" class="content-card">
+    <div class="section-header">
+        <h2 class="content-title">👥 User Management</h2>
+    </div>
+
+    <p style="color: var(--muted); margin-bottom: 20px;">
+        Manage all registered users - donors and receivers
+    </p>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="userSearch"
+               placeholder="🔍 Search users by name, email, type, or city..."
+               onkeyup="searchTable('userSearch', 'usersTable')">
+    </div>
+
+    @if (ViewBag.AllUsers != null && ViewBag.AllUsers.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Type</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Registered</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic user in ViewBag.AllUsers)
+                    {
+                        <tr>
+                            <td><strong>#@user.UserId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@user.FullName</strong>
+                            </td>
+                            <td>
+                                @if (user.UserType == "Donor")
+                                {
+                                    <span class="status-badge status-donor">❤️ Donor</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-receiver">🤲 Receiver</span>
+                                }
+                            </td>
+                            <td>@user.Email</td>
+                            <td>@user.Phone</td>
+                            <td>@user.City</td>
+                            <td>@user.RegistrationDate</td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <span class="status-badge status-completed">✓ Active</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-rejected">✗ Inactive</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="toggleUserStatus(@user.UserId, true)">
+                                        🚫 Deactivate
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-success btn-sm"
+                                            onclick="toggleUserStatus(@user.UserId, false)">
+                                        ✅ Activate
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">👥</div>
+            <h3>No Users Found</h3>
+            <p>Registered users will appear here</p>
+        </div>
+    }
+</div>
+
+<!-- Hidden Form for User Actions -->
+<form id="toggleUserForm" method="post" action="/Admin/ToggleUserStatus" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="userId" id="toggleUserId">
+</form>

@@ -1,0 +1,181 @@
+﻿<!-- Home/Dashboard Tab -->
+<div id="home" class="content-card active">
+    <h2 class="content-title">📊 Dashboard Overview</h2>
+
+    <!-- Statistics Cards with Icons -->
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number">@(ViewBag.TotalRequests ?? 0)</div>
+            <div class="stat-label">Total Requests</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-number">@(ViewBag.PendingCount ?? 0)</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">✓</div>
+            <div class="stat-number">@(ViewBag.ApprovedCount ?? 0)</div>
+            <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🎉</div>
+            <div class="stat-number">@(ViewBag.FulfilledCount ?? 0)</div>
+            <div class="stat-label">Fulfilled</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">✗</div>
+            <div class="stat-number">@(ViewBag.RejectedCount ?? 0)</div>
+            <div class="stat-label">Rejected</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">💝</div>
+            <div class="stat-number">@(ViewBag.TotalDonations ?? 0)</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+    </div>
+
+    <!-- Welfare Fund Resources -->
+    <h3 style="color: var(--accent-start); margin: 40px 0 20px 0; font-size: 22px; font-weight: 700;">
+        💰 Welfare Fund Resources
+    </h3>
+    <div class="inventory-grid">
+        <div class="inventory-item">
+            <div class="inventory-icon">💵</div>
+            <div>
+                <div class="inventory-label">Current Balance</div>
+                <div class="inventory-value" style="color: #28a745; font-weight: 700;">
+                    PKR @(((decimal?)ViewBag.CurrentBalance ?? 0).ToString("N0"))
+                </div>
+            </div>
+        </div>
+        <div class="inventory-item">
+            <div class="inventory-icon">🍲</div>
+            <div>
+                <div class="inventory-label">Food Units</div>
+                <div class="inventory-value" style="color: #667eea; font-weight: 700;">
+                    @(ViewBag.FoodInventory ?? 0) units
+                </div>
+            </div>
+        </div>
+        <div class="inventory-item">
+            <div class="inventory-icon">👔</div>
+            <div>
+                <div class="inventory-label">Male Clothes</div>
+                <div class="inventory-value" style="color: #17a2b8; font-weight: 700;">
+                    @(ViewBag.MaleClothes ?? 0) items
+                </div>
+            </div>
+        </div>
+        <div class="inventory-item">
+            <div class="inventory-icon">👗</div>
+            <div>
+                <div class="inventory-label">Female Clothes</div>
+                <div class="inventory-value" style="color: #e83e8c; font-weight: 700;">
+                    @(ViewBag.FemaleClothes ?? 0) items
+                </div>
+            </div>
+        </div>
+        <div class="inventory-item">
+            <div class="inventory-icon">👶</div>
+            <div>
+                <div class="inventory-label">Kids Clothes</div>
+                <div class="inventory-value" style="color: #ffc107; font-weight: 700;">
+                    @(ViewBag.KidsClothes ?? 0) items
+                </div>
+            </div>
+        </div>
+        <div class="inventory-item">
+            <div class="inventory-icon">🏠</div>
+            <div>
+                <div class="inventory-label">Shelter Available</div>
+                <div class="inventory-value" style="color: #764ba2; font-weight: 700;">
+                    @(ViewBag.ShelterAvailable ?? 0) rooms
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid -->
+    <h3 style="color: var(--accent-start); margin: 40px 0 20px 0; font-size: 22px; font-weight: 700;">
+        ⚡ Quick Actions
+    </h3>
+    <div class="actions-grid">
+        <div class="action-card card-requests" onclick="showSection(event, 'requests')" style="cursor: pointer;">
+            <div class="card-icon">📋</div>
+            <h3>Review Requests</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                <strong style="color: var(--accent-start); font-size: 18px;">@ViewBag.PendingCount</strong>
+                pending requests awaiting review
+            </p>
+        </div>
+
+        <div class="action-card card-donations" onclick="showSection(event, 'donations')" style="cursor: pointer;">
+            <div class="card-icon">💝</div>
+            <h3>View Donations</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                <strong style="color: var(--accent-start); font-size: 18px;">@(ViewBag.TotalDonations ?? 0)</strong>
+                total donations received
+            </p>
+        </div>
+
+        <div class="action-card card-donor-donations" onclick="showSection(event, 'donations'); setTimeout(() => showDonationType('donor'), 100);" style="cursor: pointer;">
+            <div class="card-icon">👥</div>
+            <h3>Donor Donations</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                <strong style="color: var(--accent-start); font-size: 18px;">@(ViewBag.TotalDonorDonations ?? 0)</strong>
+                donations from individuals
+            </p>
+        </div>
+
+        <div class="action-card card-ngo-donations" onclick="showSection(event, 'donations'); setTimeout(() => showDonationType('ngo'), 100);" style="cursor: pointer;">
+            <div class="card-icon">🏢</div>
+            <h3>NGO Donations</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                <strong style="color: var(--accent-start); font-size: 18px;">@(ViewBag.TotalNGODonations ?? 0)</strong>
+                donations from NGO partners
+            </p>
+        </div>
+
+        <div class="action-card card-users" onclick="showSection(event, 'users')" style="cursor: pointer;">
+            <div class="card-icon">👤</div>
+            <h3>Manage Users</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                View and control all user accounts
+            </p>
+        </div>
+
+        <div class="action-card card-ngos" onclick="showSection(event, 'ngos')" style="cursor: pointer;">
+            <div class="card-icon">🏛️</div>
+            <h3>Manage NGOs</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                Add and verify NGO partners
+            </p>
+        </div>
+
+        <div class="action-card card-admins" onclick="showSection(event, 'admins')" style="cursor: pointer;">
+            <div class="card-icon">👨‍💼</div>
+            <h3>Manage Admins</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                Add and control administrators
+            </p>
+        </div>
+
+        <div class="action-card card-ngo-requests" onclick="showSection(event, 'ngo-requests')" style="cursor: pointer;">
+            <div class="card-icon">📤</div>
+            <h3>NGO Requests</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                Request support from verified NGOs
+            </p>
+        </div>
+
+        <div class="action-card card-transactions" onclick="showSection(event, 'transactions')" style="cursor: pointer;">
+            <div class="card-icon">💳</div>
+            <h3>View Transactions</h3>
+            <p style="font-size: 14px; color: var(--muted);">
+                Track all welfare disbursements
+            </p>
+        </div>
+    </div>
+</div>

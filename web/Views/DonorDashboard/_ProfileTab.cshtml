@@ -1,0 +1,280 @@
+﻿<div id="profile" class="content-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="content-title" style="margin-bottom: 0;">Your Profile Information</h2>
+        <button type="button" class="submit-btn" onclick="toggleEditMode()" id="editToggleBtn">
+            ✏️ Edit Profile
+        </button>
+    </div>
+
+    <!-- View Mode -->
+    <div id="profileViewMode">
+        <div class="profile-grid">
+            <div class="profile-item">
+                <label>User ID</label>
+                <span>@ViewBag.UserId</span>
+            </div>
+            <div class="profile-item">
+                <label>Full Name</label>
+                <span id="viewFullName">@ViewBag.FullName</span>
+            </div>
+            <div class="profile-item">
+                <label>Email</label>
+                <span id="viewEmail">@ViewBag.Email</span>
+            </div>
+            <div class="profile-item">
+                <label>Phone</label>
+                <span id="viewPhone">@ViewBag.Phone</span>
+            </div>
+            <div class="profile-item">
+                <label>CNIC</label>
+                <span>@ViewBag.CNIC</span>
+            </div>
+            <div class="profile-item">
+                <label>Date of Birth</label>
+                <span id="viewDateOfBirth">@ViewBag.DateOfBirth</span>
+            </div>
+            <div class="profile-item">
+                <label>Gender</label>
+                <span id="viewGender">@ViewBag.Gender</span>
+            </div>
+            <div class="profile-item">
+                <label>City</label>
+                <span id="viewCity">@ViewBag.City</span>
+            </div>
+            <div class="profile-item" style="grid-column: 1 / -1;">
+                <label>Address</label>
+                <span id="viewAddress">@ViewBag.Address</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div id="profileEditMode" style="display: none;">
+        <form action="/DonorDashboard/UpdateProfile" method="post" class="donation-form" id="profileUpdateForm">
+            <h3 style="color: var(--accent-start); margin-bottom: 20px; font-size: 18px;">📝 Basic Information</h3>
+
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="FullName" id="editFullName" value="@ViewBag.FullName" required placeholder="e.g., Muhammad Ahmed Khan" />
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="Email" id="editEmail" value="@ViewBag.Email" required placeholder="e.g., yourname@example.com" />
+            </div>
+
+            <div class="form-group">
+                <label>Phone *</label>
+                <input type="tel" name="Phone" id="editPhone" value="@ViewBag.Phone" required pattern="[0-9]{11}" placeholder="e.g., 03001234567" />
+                <small style="color: var(--muted); font-size: 12px;">Format: 11 digits (e.g., 03001234567)</small>
+            </div>
+
+            <div class="form-group">
+                <label>Date of Birth *</label>
+                <input type="date" name="DateOfBirth" id="editDateOfBirth" value="" required max="2010-12-31" />
+                <small style="color: var(--muted); font-size: 12px;">Must be born on or before December 31, 2010</small>
+            </div>
+
+            <div class="form-group">
+                <label>Gender *</label>
+                <select name="Gender" id="editGender" required>
+                    <option value="">Select your gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                    <option value="PreferNotToSay">Prefer Not to Say</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>City *</label>
+                <input type="text" name="City" id="editCity" value="@ViewBag.City" required placeholder="e.g., Lahore, Karachi, Islamabad" />
+            </div>
+
+            <div class="form-group">
+                <label>Address *</label>
+                <textarea name="Address" id="editAddress" rows="3" required placeholder="e.g., House # 123, Street 45, Model Town"></textarea>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #E8E4DC; margin: 25px 0;" />
+
+            <h3 style="color: var(--accent-start); margin-bottom: 20px; font-size: 18px;">🔒 Change Password (Optional)</h3>
+
+            <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" name="CurrentPassword" id="currentPassword" placeholder="Enter your current password" />
+                <small style="color: var(--muted); font-size: 12px;">Leave blank if you don't want to change password</small>
+            </div>
+
+            <div class="form-group">
+                <label>New Password</label>
+                <input type="password" name="NewPassword" id="newPassword" minlength="6" placeholder="Enter new password (minimum 6 characters)" />
+            </div>
+
+            <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" name="ConfirmPassword" id="confirmPassword" minlength="6" placeholder="Re-enter your new password" />
+                <span id="passwordMatchError" style="color: #D35400; font-size: 12px; display: none;">⚠️ Passwords do not match!</span>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="submit-btn">💾 Save Changes</button>
+                <button type="button" class="cancel-btn" onclick="toggleEditMode()">❌ Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .cancel-btn {
+        background: transparent;
+        color: var(--muted);
+        padding: 12px 18px;
+        border-radius: 10px;
+        border: 2px solid #D4D4BC;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 15px;
+        transition: all 0.3s;
+    }
+
+        .cancel-btn:hover {
+            background: rgba(44, 102, 110, 0.05);
+            border-color: var(--accent-start);
+        }
+</style>
+
+<script>
+    function toggleEditMode() {
+        const viewMode = document.getElementById('profileViewMode');
+        const editMode = document.getElementById('profileEditMode');
+        const toggleBtn = document.getElementById('editToggleBtn');
+
+        if (viewMode.style.display === 'none') {
+            // Switch to view mode
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+            toggleBtn.innerHTML = '✏️ Edit Profile';
+
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        } else {
+            // Switch to edit mode
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+            toggleBtn.innerHTML = '👁️ View Profile';
+
+            // Set date of birth value (convert from display format to YYYY-MM-DD)
+            const dobDisplay = '@ViewBag.DateOfBirth';
+            if (dobDisplay) {
+                // Parse the date string and convert to YYYY-MM-DD format
+                const dateObj = new Date(dobDisplay);
+                const yyyy = dateObj.getFullYear();
+                const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const dd = String(dateObj.getDate()).padStart(2, '0');
+                document.getElementById('editDateOfBirth').value = `${yyyy}-${mm}-${dd}`;
+            }
+
+            // Set gender value
+            const genderSelect = document.getElementById('editGender');
+            const currentGender = '@ViewBag.Gender';
+            if (genderSelect && currentGender) {
+                genderSelect.value = currentGender;
+            }
+
+            // Set address value
+            const addressTextarea = document.getElementById('editAddress');
+            if (addressTextarea) {
+                addressTextarea.value = '@ViewBag.Address';
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('profileUpdateForm');
+        const currentPassword = document.getElementById('currentPassword');
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordMatchError = document.getElementById('passwordMatchError');
+        const dobInput = document.getElementById('editDateOfBirth');
+
+        // Real-time password match validation
+        if (confirmPassword) {
+            confirmPassword.addEventListener('input', function() {
+                if (newPassword.value && confirmPassword.value) {
+                    if (newPassword.value !== confirmPassword.value) {
+                        passwordMatchError.style.display = 'block';
+                    } else {
+                        passwordMatchError.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Validate phone
+                const phone = document.getElementById('editPhone').value;
+                if (phone.length !== 11 || !/^\d+$/.test(phone)) {
+                    e.preventDefault();
+                    alert('Phone number must be exactly 11 digits');
+                    return false;
+                }
+
+                // Validate date of birth (must be on or before Dec 31, 2010)
+                const dob = new Date(dobInput.value);
+                const maxDate = new Date('2010-12-31');
+                if (dob > maxDate) {
+                    e.preventDefault();
+                    alert('You must be born on or before December 31, 2010 (at least 15 years old)');
+                    dobInput.focus();
+                    return false;
+                }
+
+                // Validate password change if attempted
+                const currentPwd = currentPassword.value;
+                const newPwd = newPassword.value;
+                const confirmPwd = confirmPassword.value;
+
+                // If any password field is filled, all must be filled
+                if (currentPwd || newPwd || confirmPwd) {
+                    if (!currentPwd) {
+                        e.preventDefault();
+                        alert('Please enter your current password to change it');
+                        currentPassword.focus();
+                        return false;
+                    }
+                    if (!newPwd) {
+                        e.preventDefault();
+                        alert('Please enter a new password');
+                        newPassword.focus();
+                        return false;
+                    }
+                    if (!confirmPwd) {
+                        e.preventDefault();
+                        alert('Please confirm your new password');
+                        confirmPassword.focus();
+                        return false;
+                    }
+                    if (newPwd !== confirmPwd) {
+                        e.preventDefault();
+                        alert('New passwords do not match!');
+                        confirmPassword.focus();
+                        return false;
+                    }
+                    if (newPwd.length < 6) {
+                        e.preventDefault();
+                        alert('New password must be at least 6 characters');
+                        newPassword.focus();
+                        return false;
+                    }
+                }
+
+                console.log('Profile update form submitting...');
+                return true;
+            });
+        }
+    });
+</script>

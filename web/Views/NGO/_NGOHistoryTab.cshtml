@@ -1,0 +1,108 @@
+﻿<!-- Donation History Tab -->
+<div id="history" class="content-card">
+    <h2 class="content-title">📊 Donation History</h2>
+
+    <p style="color: var(--muted); margin-bottom: 20px;">
+        Track all your donations to the welfare fund
+    </p>
+
+    <!-- Summary Cards -->
+    <div class="stats-card" style="margin-bottom: 30px;">
+        <div class="stat-item">
+            <div class="stat-icon">💝</div>
+            <div class="stat-number">@(ViewBag.TotalDonations ?? 0)</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">💰</div>
+            <div class="stat-number">PKR @(((decimal?)ViewBag.TotalMoneyDonated ?? 0).ToString("N0"))</div>
+            <div class="stat-label">Money Donated</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🍲</div>
+            <div class="stat-number">@(ViewBag.TotalFoodDonated ?? 0)</div>
+            <div class="stat-label">Food Units</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">👕</div>
+            <div class="stat-number">@(ViewBag.TotalClothesDonated ?? 0)</div>
+            <div class="stat-label">Clothes Items</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🏠</div>
+            <div class="stat-number">@(ViewBag.TotalShelterDonated ?? 0)</div>
+            <div class="stat-label">Shelter Beds</div>
+        </div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="historySearch"
+               placeholder="🔍 Search donations by type, date, or details..."
+               onkeyup="searchTable('historySearch', 'historyTable')">
+    </div>
+
+    @if (ViewBag.DonationHistory != null && ViewBag.DonationHistory.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Donation Type</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic donation in ViewBag.DonationHistory)
+                    {
+                        <tr>
+                            <td><strong>#@donation.TransactionId</strong></td>
+                            <td>
+                                @if (donation.Type == "Money")
+                                {
+                                    <span style="font-size: 24px;">💰</span>
+                                }
+                                else if (donation.Type == "Food")
+                                {
+                                    <span style="font-size: 24px;">🍲</span>
+                                }
+                                else if (donation.Type == "Clothes")
+                                {
+                                    <span style="font-size: 24px;">👕</span>
+                                }
+                                else if (donation.Type == "Shelter")
+                                {
+                                    <span style="font-size: 24px;">🏠</span>
+                                }
+                                <br>
+                                <strong>@donation.Type</strong>
+                            </td>
+                            <td>@donation.Date</td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@donation.Details</strong>
+                            </td>
+                            <td>
+                                <span class="status-badge status-completed">✓ @donation.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">📊</div>
+            <h3>No Donation History</h3>
+            <p>You haven't made any donations yet. Start making a difference today!</p>
+            <button class="add-button" onclick="showSection(event, 'donate')" style="margin-top: 20px;">
+                💝 Make Your First Donation
+            </button>
+        </div>
+    }
+</div>

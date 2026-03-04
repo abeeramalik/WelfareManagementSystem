@@ -1,0 +1,223 @@
+﻿<!-- NGOs Management Tab -->
+<div id="ngos" class="content-card">
+    <div class="section-header">
+        <h2 class="content-title">🏢 NGO Management</h2>
+        <button class="add-button" onclick="openModal('addNGOModal')">
+            ➕ Add New NGO
+        </button>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="ngoSearch"
+               placeholder="🔍 Search NGOs by name, email, city, or registration number..."
+               onkeyup="searchTable('ngoSearch', 'ngoTable')">
+    </div>
+
+    <!-- NGOs Table -->
+    @if (ViewBag.AllNGOs != null && ViewBag.AllNGOs.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="ngoTable">
+                <thead>
+                    <tr>
+                        <th>NGO ID</th>
+                        <th>Organization Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>Registration Date</th>
+                        <th>Status</th>
+                        <th>Verification</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic ngo in ViewBag.AllNGOs)
+                    {
+                        <tr>
+                            <td><strong>#@ngo.NgoId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@ngo.OrganizationName</strong>
+                            </td>
+                            <td>@ngo.Email</td>
+                            <td>@ngo.Phone</td>
+                            <td>@ngo.City</td>
+                            <td>@ngo.RegistrationDate</td>
+                            <td>
+                                @if (ngo.IsActive)
+                                {
+                                    <span class="status-badge status-active">✓ Active</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-inactive">✗ Inactive</span>
+                                }
+                            </td>
+                            <td>
+                                @if (ngo.IsVerified)
+                                {
+                                    <span class="status-badge status-verified">✓ Verified</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-pending">⏳ Pending</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="action-btns">
+                                    @if (ngo.IsActive)
+                                    {
+                                        <button class="btn btn-danger btn-sm"
+                                                onclick="toggleNGOStatus(@ngo.NgoId, true)">
+                                            🚫 Deactivate
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success btn-sm"
+                                                onclick="toggleNGOStatus(@ngo.NgoId, false)">
+                                            ✅ Activate
+                                        </button>
+                                    }
+
+                                    @if (ngo.IsVerified)
+                                    {
+                                        <button class="btn btn-warning btn-sm"
+                                                onclick="verifyNGO(@ngo.NgoId, true)">
+                                            ⚠️ Unverify
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success btn-sm"
+                                                onclick="verifyNGO(@ngo.NgoId, false)">
+                                            ✅ Verify
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">🏢</div>
+            <h3>No NGOs Found</h3>
+            <p>Click the button above to add new NGOs</p>
+        </div>
+    }
+
+    <!-- Add NGO Modal -->
+    <div id="addNGOModal" class="modal">
+        <form method="post" action="/Admin/AddNGO" class="modal-content">
+            <div class="modal-header">
+                <h2>➕ Add New NGO</h2>
+                <span class="close" onclick="closeModal('addNGOModal')">×</span>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="NgoId">NGO ID *</label>
+                    <input type="number"
+                           id="NgoId"
+                           name="NgoId"
+                           required
+                           min="100000"
+                           max="999999"
+                           placeholder="Enter 6-digit ID">
+                </div>
+
+                <div class="form-group">
+                    <label for="OrganizationName">Organization Name *</label>
+                    <input type="text"
+                           id="OrganizationName"
+                           name="OrganizationName"
+                           required
+                           placeholder="Enter organization name">
+                </div>
+
+                <div class="form-group">
+                    <label for="NgoEmail">Email *</label>
+                    <input type="email"
+                           id="NgoEmail"
+                           name="Email"
+                           required
+                           placeholder="Enter email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="NgoPassword">Password *</label>
+                    <input type="password"
+                           id="NgoPassword"
+                           name="Password"
+                           required
+                           placeholder="Enter secure password">
+                </div>
+
+                <div class="form-group">
+                    <label for="NgoPhone">Phone Number *</label>
+                    <input type="tel"
+                           id="NgoPhone"
+                           name="Phone"
+                           required
+                           placeholder="+92-XXX-XXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="NgoAddress">Address *</label>
+                    <textarea id="NgoAddress"
+                              name="Address"
+                              required
+                              placeholder="Enter complete address"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="NgoCity">City *</label>
+                    <input type="text"
+                           id="NgoCity"
+                           name="City"
+                           required
+                           placeholder="Enter city name">
+                </div>
+
+                <div class="form-group">
+                    <label for="RegistrationNumber">Registration Number *</label>
+                    <input type="text"
+                           id="RegistrationNumber"
+                           name="RegistrationNumber"
+                           required
+                           placeholder="Enter official registration number">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('addNGOModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    ✓ Add NGO
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Hidden Forms for NGO Actions -->
+<form id="toggleNGOForm" method="post" action="/Admin/ToggleNGOStatus" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ngoId" id="toggleNGOId">
+</form>
+
+<form id="verifyNGOForm" method="post" action="/Admin/VerifyNGO" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="ngoId" id="verifyNGOId">
+</form>

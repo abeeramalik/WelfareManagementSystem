@@ -1,0 +1,114 @@
+﻿<div id="requests" class="content-card">
+    <h2 class="content-title">📋 Pending Requests</h2>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="requestSearch"
+               placeholder="🔍 Search requests by receiver name, type, or date..."
+               onkeyup="searchTable('requestSearch', 'requestsTable')">
+    </div>
+
+    @if (ViewBag.PendingRequests != null && ViewBag.PendingRequests.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Receiver</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic req in ViewBag.PendingRequests)
+                    {
+                        <tr>
+                            <td><strong>#@req.RequestId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@req.ReceiverName</strong>
+                                <br>
+                                <small style="color: var(--muted);">ID: @req.ReceiverId</small>
+                            </td>
+                            <td>
+                                @if (req.Type == "Food")
+                                {
+                                    <span style="font-size: 18px;">🍲</span>
+                                }
+                                else if (req.Type == "Clothes")
+                                {
+                                    <span style="font-size: 18px;">👕</span>
+                                }
+                                else if (req.Type == "Loan")
+                                {
+                                    <span style="font-size: 18px;">💰</span>
+                                }
+                                else if (req.Type == "Shelter")
+                                {
+                                    <span style="font-size: 18px;">🏠</span>
+                                }
+                                <br>
+                                <strong>@req.Type</strong>
+                            </td>
+                            <td>@req.Date</td>
+                            <td>@req.Details</td>
+                            <td>
+                                @if (req.Status == "Pending")
+                                {
+                                    <span class="status-badge status-pending">⏳ Pending</span>
+                                }
+                                else if (req.Status == "Approved")
+                                {
+                                    <span class="status-badge status-approved">✓ Approved</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="action-btns">
+                                    @if (req.Status == "Pending")
+                                    {
+                                        <button class="btn btn-approve btn-sm"
+                                                onclick="approveRequest(@req.RequestId)">
+                                            ✓ Approve
+                                        </button>
+                                    }
+                                    <button class="btn btn-reject btn-sm"
+                                            onclick="rejectRequest(@req.RequestId)">
+                                        ✗ Reject
+                                    </button>
+                                    @if (req.CanFulfill)
+                                    {
+                                        <button class="btn btn-fulfill btn-sm"
+                                                onclick="fulfillRequest(@req.RequestId, true)">
+                                            🎁 Fulfill
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-fulfill btn-sm"
+                                                onclick="fulfillRequest(@req.RequestId, false)"
+                                                disabled
+                                                title="Insufficient resources">
+                                            🎁 Fulfill
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">📋</div>
+            <h3>No Pending Requests</h3>
+            <p>All requests have been processed. Great job!</p>
+        </div>
+    }
+</div>

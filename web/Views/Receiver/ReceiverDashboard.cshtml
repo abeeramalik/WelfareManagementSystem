@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Receiver Dashboard";
+    var successMsg = TempData["Success"]?.ToString();
+    var errorMsg = TempData["Error"]?.ToString();
+    var justRequested = TempData["JustRequested"]?.ToString();
+}
+
+<link rel="stylesheet" href="~/css/ReceiverDashboard.css" />
+
+<div class="dashboard-wrapper">
+    <div>
+        @await Html.PartialAsync("_ReceiverSidebar")
+    </div>
+    <div class="main-content">
+        @await Html.PartialAsync("_ReceiverHeader")
+
+        @if (!string.IsNullOrEmpty(justRequested) && !string.IsNullOrEmpty(successMsg))
+        {
+            <div class="alert alert-success">
+                ✓ @successMsg
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(errorMsg))
+        {
+            <div class="alert alert-error">
+                ✗ @errorMsg
+            </div>
+        }
+
+        <div id="tabs">
+            @await Html.PartialAsync("_ReceiverHomeTab")
+            @await Html.PartialAsync("_ReceiverProfileTab")
+            @await Html.PartialAsync("_ReceiverFoodTab")
+            @await Html.PartialAsync("_ReceiverClothesTab")
+            @await Html.PartialAsync("_ReceiverLoanTab")
+            @await Html.PartialAsync("_ReceiverShelterTab")
+            @await Html.PartialAsync("_ReceiverHistoryTab")
+            @await Html.PartialAsync("_ReceiverAboutTab")
+        </div>
+    </div>
+</div>
+
+<script src="~/js/ReceiverDashboard.js"></script>
+
+@if (!string.IsNullOrEmpty(justRequested))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof showSuccessAnimation === 'function') {
+                    showSuccessAnimation('@justRequested');
+                }
+            }, 600);
+        });
+    </script>
+}

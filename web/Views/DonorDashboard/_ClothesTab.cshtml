@@ -1,0 +1,64 @@
+﻿<div id="clothes" class="content-card">
+    <h2 class="content-title">Donate Clothes</h2>
+    <form action="/DonorDashboard/DonateClothesAction" method="post" class="donation-form" id="clothesForm">
+
+        <div class="form-group">
+            <label>Select Category *</label>
+            <div class="clothes-categories">
+                <div class="category-card" data-category="Kids">
+                    <div class="category-icon">👶</div>
+                    <div>Kids Clothes</div>
+                </div>
+                <div class="category-card" data-category="Male">
+                    <div class="category-icon">👔</div>
+                    <div>Male Clothes</div>
+                </div>
+                <div class="category-card" data-category="Female">
+                    <div class="category-icon">👗</div>
+                    <div>Female Clothes</div>
+                </div>
+            </div>
+            <input type="hidden" id="clothesCategory" name="Category" required />
+            <span class="validation-error" id="categoryError" style="color: #e74c3c; font-size: 13px; display: none;">Please select a category</span>
+        </div>
+
+        <div class="form-group">
+            <label>Quantity (Number of Items) *</label>
+            <div class="quantity-input">
+                <button type="button" class="qty-btn-minus">-</button>
+                <input type="number" id="clothesQuantity" name="Quantity" value="1" min="1" required />
+                <button type="button" class="qty-btn-plus">+</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Cloth Type *</label>
+            <select name="Condition" id="clothesType" required>
+                <option value="">Select cloth type</option>
+                <option value="Winter">Winter</option>
+                <option value="Summer">Summer</option>
+                <option value="Formal">Formal</option>
+                <option value="Casual">Casual</option>
+                <option value="Sports">Sports</option>
+                <option value="Traditional">Traditional</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="Description" rows="4" placeholder="Describe the clothes (sizes, colors, condition, etc.)..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Pickup Location *</label>
+            <input type="text" name="PickupLocation" id="pickupLocation" required placeholder="Enter pickup address" />
+        </div>
+
+        <div class="form-group">
+            <label>Preferred Pickup Date & Time *</label>
+            <input type="datetime-local" name="PickupDateTime" id="clothesPickupDateTime" required />
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Clothes Donation</button>
+    </form>
+</div>

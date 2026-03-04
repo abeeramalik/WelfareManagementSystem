@@ -1,0 +1,70 @@
+﻿@* Hidden markers for JavaScript animation detection - MUST BE AT TOP *@
+@if (TempData["Success"] != null)
+{
+    <div data-success-message="@TempData["Success"]" style="display:none;"></div>
+}
+@if (TempData["Error"] != null)
+{
+    <div data-error-type="@TempData["ErrorType"]" data-error-message="@TempData["Error"]" style="display:none;"></div>
+}
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/AdminDashboard.css" />
+
+<div class="dashboard-wrapper">
+    <div>
+        @await Html.PartialAsync("_Sidebar")
+    </div>
+    <div class="main-content">
+        @await Html.PartialAsync("_Header")
+
+        <div id="tabs">
+            @await Html.PartialAsync("_HomeTab")
+            @await Html.PartialAsync("_RequestsTab")
+            @await Html.PartialAsync("_DonationsTab")
+            @await Html.PartialAsync("_UsersTab")
+            @await Html.PartialAsync("_NGOsTab")
+            @await Html.PartialAsync("_AdminsTab")
+            @await Html.PartialAsync("_NGORequestsTab")
+            @await Html.PartialAsync("_TransactionsTab")
+            @await Html.PartialAsync("_AboutTab")
+        </div>
+    </div>
+</div>
+
+<!-- Hidden Forms for Request Actions - CRITICAL: Must have proper action URLs -->
+<form id="approveForm" method="post" action="/Admin/ApproveRequest">
+    <input type="hidden" id="approveRequestId" name="requestId" />
+</form>
+
+<form id="rejectForm" method="post" action="/Admin/RejectRequest">
+    <input type="hidden" id="rejectRequestId" name="requestId" />
+    <input type="hidden" id="rejectReason" name="reason" />
+</form>
+
+<form id="fulfillForm" method="post" action="/Admin/FulfillRequest">
+    <input type="hidden" id="fulfillRequestId" name="requestId" />
+</form>
+
+@if (TempData["JustFulfilled"] != null)
+{
+    <div data-just-fulfilled="@TempData["JustFulfilled"]"></div>
+}
+
+<script src="~/js/AdminDashboard.js"></script>
+
+@if (TempData["JustFulfilled"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof showSuccessAnimation === 'function') {
+                    showSuccessAnimation('@TempData["JustFulfilled"]');
+                }
+            }, 600);
+        });
+    </script>
+}

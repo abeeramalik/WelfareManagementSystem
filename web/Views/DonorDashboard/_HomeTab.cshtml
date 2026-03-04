@@ -1,0 +1,77 @@
+﻿<div id="home" class="content-card active">
+    <h2 class="content-title">Dashboard Overview</h2>
+
+    <div class="stats-card">
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.TotalDonations ?? 0)</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.DonationHistory != null ? ((List<object>)ViewBag.DonationHistory).Count(d => ((dynamic)d).Type == "Food") : 0)</div>
+            <div class="stat-label">Food Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.DonationHistory != null ? ((List<object>)ViewBag.DonationHistory).Count(d => ((dynamic)d).Type == "Clothes") : 0)</div>
+            <div class="stat-label">Clothes Donations</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">@(ViewBag.DonationHistory != null ? ((List<object>)ViewBag.DonationHistory).Count(d => ((dynamic)d).Type == "Money") : 0)</div>
+            <div class="stat-label">Money Donations</div>
+        </div>
+    </div>
+
+    <div class="action-cards">
+        <div class="action-card card-food" onclick="showSection({currentTarget: document.querySelector('.nav-link:nth-child(3)')}, 'food')">
+            <div class="card-icon">🍲</div>
+            <h3>Donate Food</h3>
+            <p>Help feed families in need</p>
+        </div>
+        <div class="action-card card-clothes" onclick="showSection({currentTarget: document.querySelector('.nav-link:nth-child(4)')}, 'clothes')">
+            <div class="card-icon">👕</div>
+            <h3>Donate Clothes</h3>
+            <p>Share warmth and comfort</p>
+        </div>
+        <div class="action-card card-money" onclick="showSection({currentTarget: document.querySelector('.nav-link:nth-child(5)')}, 'money')">
+            <div class="card-icon">💰</div>
+            <h3>Donate Money</h3>
+            <p>Support our programs</p>
+        </div>
+    </div>
+
+    @if (ViewBag.DonationHistory != null && ((List<object>)ViewBag.DonationHistory).Count > 0)
+    {
+        <div class="recent-donations">
+            <h3>Recent Donations</h3>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var donation in ((List<object>)ViewBag.DonationHistory).Take(5))
+                    {
+                        var d = (dynamic)donation;
+                        <tr>
+                            <td>@d.Date</td>
+                            <td>@d.Type</td>
+                            <td>@d.Description</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">🎁</div>
+            <h3>Start Your Giving Journey</h3>
+            <p>Make your first donation today and help those in need</p>
+        </div>
+    }
+</div>

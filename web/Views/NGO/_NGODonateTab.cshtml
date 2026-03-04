@@ -1,0 +1,296 @@
+﻿<!-- Donate Tab -->
+<div id="donate" class="content-card">
+    <h2 class="content-title">💝 Make a Donation</h2>
+
+    <p style="color: var(--muted); margin-bottom: 30px; font-size: 15px;">
+        Choose what you'd like to donate to support the welfare fund and help those in need
+    </p>
+
+    <!-- Donation Type Cards -->
+    <div class="action-cards">
+        <div class="action-card card-donate-money" onclick="openModal('donateMoneyModal')">
+            <div class="card-icon">💰</div>
+            <h3>Donate Money</h3>
+            <p>Financial contribution to the welfare fund</p>
+        </div>
+
+        <div class="action-card card-donate-food" onclick="openModal('donateFoodModal')">
+            <div class="card-icon">🍲</div>
+            <h3>Donate Food</h3>
+            <p>Food supplies for families in need</p>
+        </div>
+
+        <div class="action-card card-donate-clothes" onclick="openModal('donateClothesModal')">
+            <div class="card-icon">👕</div>
+            <h3>Donate Clothes</h3>
+            <p>Clothing items for all age groups</p>
+        </div>
+
+        <div class="action-card card-donate-shelter" onclick="openModal('donateShelterModal')">
+            <div class="card-icon">🏠</div>
+            <h3>Donate Shelter</h3>
+            <p>Shelter beds for homeless individuals</p>
+        </div>
+    </div>
+
+    <!-- Your Impact Section -->
+    <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #EBF4F5, #FFFFFF); border-radius: 15px; border: 1px solid #D6E9EA;">
+        <h3 style="color: var(--accent-start); margin-bottom: 15px; font-size: 22px;">🌟 Your Impact</h3>
+        <div class="profile-grid">
+            <div class="profile-item">
+                <label>Total Donations</label>
+                <span style="color: var(--accent-start);">@(ViewBag.TotalDonations ?? 0)</span>
+            </div>
+            <div class="profile-item">
+                <label>Money Donated</label>
+                <span style="color: #28a745;">PKR @(((decimal?)ViewBag.TotalMoneyDonated ?? 0).ToString("N0"))</span>
+            </div>
+            <div class="profile-item">
+                <label>Food Units</label>
+                <span style="color: #667eea;">@(ViewBag.TotalFoodDonated ?? 0) units</span>
+            </div>
+            <div class="profile-item">
+                <label>Clothes Items</label>
+                <span style="color: #e83e8c;">@(ViewBag.TotalClothesDonated ?? 0) items</span>
+            </div>
+            <div class="profile-item">
+                <label>Shelter Beds</label>
+                <span style="color: #764ba2;">@(ViewBag.TotalShelterDonated ?? 0) beds</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donate Money Modal - FIXED -->
+<div id="donateMoneyModal" class="modal">
+    <form method="post" action="/NGO/DonateMoney" class="modal-content">
+        <div class="modal-header">
+            <h2>💰 Donate Money</h2>
+            <span class="close" onclick="closeModal('donateMoneyModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="moneyAmount">Donation Amount (PKR) *</label>
+                <input type="number"
+                       id="moneyAmount"
+                       name="amount"
+                       required
+                       min="1"
+                       step="1"
+                       placeholder="Enter amount (e.g., 5000)">
+                <small style="color: #666;">Enter whole numbers only (e.g., 5000, 10000)</small>
+            </div>
+
+            <div class="form-group">
+                <label for="moneyDescription">Description (Optional)</label>
+                <textarea id="moneyDescription"
+                          name="description"
+                          rows="3"
+                          placeholder="Add a message or specify purpose..."></textarea>
+            </div>
+
+            <!-- Quick amount buttons -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('moneyAmount').value = 5000">
+                    PKR 5,000
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('moneyAmount').value = 10000">
+                    PKR 10,000
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('moneyAmount').value = 25000">
+                    PKR 25,000
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('moneyAmount').value = 50000">
+                    PKR 50,000
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('moneyAmount').value = 100000">
+                    PKR 100,000
+                </button>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('donateMoneyModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                💰 Donate Now
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Donate Food Modal -->
+<div id="donateFoodModal" class="modal">
+    <form method="post" action="/NGO/DonateFood" class="modal-content">
+        <div class="modal-header">
+            <h2>🍲 Donate Food</h2>
+            <span class="close" onclick="closeModal('donateFoodModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="foodQuantity">Food Quantity *</label>
+                <input type="number"
+                       id="foodQuantity"
+                       name="quantity"
+                       required
+                       min="1"
+                       placeholder="Enter quantity">
+            </div>
+
+            <div class="form-group">
+                <label for="foodUnit">Unit Type *</label>
+                <select id="foodUnit" name="unit" required>
+                    <option value="">-- Select Unit --</option>
+                    <option value="rations">Rations (Food Packages)</option>
+                    <option value="kg">Kilograms (kg)</option>
+                    <option value="bags">Bags</option>
+                    <option value="boxes">Boxes</option>
+                    <option value="units">General Units</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="foodDescription">Description *</label>
+                <textarea id="foodDescription"
+                          name="description"
+                          required
+                          rows="3"
+                          placeholder="Describe the food items (e.g., Rice, Flour, Lentils)..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('donateFoodModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                🍲 Donate Food
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Donate Clothes Modal -->
+<div id="donateClothesModal" class="modal">
+    <form method="post" action="/NGO/DonateClothes" class="modal-content">
+        <div class="modal-header">
+            <h2>👕 Donate Clothes</h2>
+            <span class="close" onclick="closeModal('donateClothesModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <p style="color: var(--muted); margin-bottom: 20px; font-size: 14px;">
+                Specify the quantities for each category. At least one category is required.
+            </p>
+
+            <div class="profile-grid">
+                <div class="form-group">
+                    <label for="maleClothesQty">👔 Male Clothes</label>
+                    <input type="number"
+                           id="maleClothesQty"
+                           name="maleQty"
+                           min="0"
+                           value="0"
+                           placeholder="Quantity">
+                </div>
+
+                <div class="form-group">
+                    <label for="femaleClothesQty">👗 Female Clothes</label>
+                    <input type="number"
+                           id="femaleClothesQty"
+                           name="femaleQty"
+                           min="0"
+                           value="0"
+                           placeholder="Quantity">
+                </div>
+
+                <div class="form-group">
+                    <label for="kidsClothesQty">👶 Kids Clothes</label>
+                    <input type="number"
+                           id="kidsClothesQty"
+                           name="kidsQty"
+                           min="0"
+                           value="0"
+                           placeholder="Quantity">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="clothesType">Clothes Type *</label>
+                <select id="clothesType" name="clothesType" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="Winter">Winter Clothes</option>
+                    <option value="Summer">Summer Clothes</option>
+                    <option value="Formal">Formal Wear</option>
+                    <option value="Casual">Casual Wear</option>
+                    <option value="Mixed">Mixed/Assorted</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="clothesDescription">Description (Optional)</label>
+                <textarea id="clothesDescription"
+                          name="description"
+                          rows="3"
+                          placeholder="Additional details about the clothing items..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('donateClothesModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                👕 Donate Clothes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Donate Shelter Modal -->
+<div id="donateShelterModal" class="modal">
+    <form method="post" action="/NGO/DonateShelter" class="modal-content">
+        <div class="modal-header">
+            <h2>🏠 Donate Shelter</h2>
+            <span class="close" onclick="closeModal('donateShelterModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="shelterBeds">Number of Shelter Beds *</label>
+                <input type="number"
+                       id="shelterBeds"
+                       name="beds"
+                       required
+                       min="1"
+                       placeholder="Enter number of beds">
+                <small>How many shelter beds are you providing?</small>
+            </div>
+
+            <div class="form-group">
+                <label for="shelterDescription">Description *</label>
+                <textarea id="shelterDescription"
+                          name="description"
+                          required
+                          rows="3"
+                          placeholder="Describe the shelter facility (location, amenities, etc.)..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('donateShelterModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                🏠 Donate Shelter
+            </button>
+        </div>
+    </form>
+</div>

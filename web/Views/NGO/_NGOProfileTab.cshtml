@@ -1,0 +1,232 @@
+﻿<!-- Profile Settings Tab -->
+<div id="profile" class="content-card">
+    <h2 class="content-title">⚙️ Profile Settings</h2>
+
+    <!-- Organization Information -->
+    <h3 style="color: var(--accent-start); margin-bottom: 20px; font-size: 20px;">
+        🏢 Organization Information
+    </h3>
+    <div class="profile-grid">
+        <div class="profile-item">
+            <label>NGO ID</label>
+            <span>#@ViewBag.NgoId</span>
+        </div>
+        <div class="profile-item">
+            <label>Organization Name</label>
+            <span>@ViewBag.OrganizationName</span>
+        </div>
+        <div class="profile-item">
+            <label>Email</label>
+            <span>@ViewBag.Email</span>
+        </div>
+        <div class="profile-item">
+            <label>Phone</label>
+            <span>@ViewBag.Phone</span>
+        </div>
+        <div class="profile-item">
+            <label>City</label>
+            <span>@ViewBag.City</span>
+        </div>
+        <div class="profile-item">
+            <label>Registration Number</label>
+            <span>@ViewBag.RegistrationNumber</span>
+        </div>
+        <div class="profile-item">
+            <label>Registration Date</label>
+            <span>@ViewBag.RegistrationDate</span>
+        </div>
+        <div class="profile-item">
+            <label>Verification Status</label>
+            @if (ViewBag.IsVerified)
+            {
+                <span class="status-badge status-verified">✓ Verified</span>
+            }
+            else
+            {
+                <span class="status-badge status-pending">⏳ Pending</span>
+            }
+        </div>
+    </div>
+
+    <div class="profile-item" style="margin-top: 20px; max-width: 100%;">
+        <label>Address</label>
+        <span>@ViewBag.Address</span>
+    </div>
+
+    <!-- Update Profile Section -->
+    <h3 style="color: var(--accent-start); margin: 40px 0 20px 0; font-size: 20px;">
+        ✏️ Update Profile
+    </h3>
+
+    <div class="action-cards">
+        <div class="action-card card-donate-money" onclick="openModal('updateProfileModal')">
+            <div class="card-icon">✏️</div>
+            <h3>Update Info</h3>
+            <p>Update organization name, phone, address, city</p>
+        </div>
+
+        <div class="action-card card-donate-food" onclick="openModal('updateEmailModal')">
+            <div class="card-icon">📧</div>
+            <h3>Change Email</h3>
+            <p>Update your email address</p>
+        </div>
+
+        <div class="action-card card-donate-clothes" onclick="openModal('updatePasswordModal')">
+            <div class="card-icon">🔒</div>
+            <h3>Change Password</h3>
+            <p>Update your account password</p>
+        </div>
+    </div>
+</div>
+
+<!-- Update Profile Modal -->
+<div id="updateProfileModal" class="modal">
+    <form method="post" action="/NGO/UpdateProfile" class="modal-content">
+        <div class="modal-header">
+            <h2>✏️ Update Organization Profile</h2>
+            <span class="close" onclick="closeModal('updateProfileModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="updateOrgName">Organization Name *</label>
+                <input type="text"
+                       id="updateOrgName"
+                       name="organizationName"
+                       required
+                       value="@ViewBag.OrganizationName"
+                       placeholder="Enter organization name">
+            </div>
+
+            <div class="form-group">
+                <label for="updatePhone">Phone Number *</label>
+                <input type="tel"
+                       id="updatePhone"
+                       name="phone"
+                       required
+                       value="@ViewBag.Phone"
+                       placeholder="+92-XXX-XXXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label for="updateAddress">Address *</label>
+                <textarea id="updateAddress"
+                          name="address"
+                          required
+                          rows="3">@ViewBag.Address</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="updateCity">City *</label>
+                <input type="text"
+                       id="updateCity"
+                       name="city"
+                       required
+                       value="@ViewBag.City"
+                       placeholder="Enter city name">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('updateProfileModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                ✓ Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Update Email Modal -->
+<div id="updateEmailModal" class="modal">
+    <form method="post" action="/NGO/UpdateEmail" class="modal-content">
+        <div class="modal-header">
+            <h2>📧 Change Email Address</h2>
+            <span class="close" onclick="closeModal('updateEmailModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="currentEmail">Current Email</label>
+                <input type="email"
+                       id="currentEmail"
+                       value="@ViewBag.Email"
+                       disabled
+                       style="background: #f0f0f0;">
+            </div>
+
+            <div class="form-group">
+                <label for="newEmail">New Email Address *</label>
+                <input type="email"
+                       id="newEmail"
+                       name="newEmail"
+                       required
+                       placeholder="Enter new email address">
+                <small>Make sure you have access to this email</small>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('updateEmailModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                📧 Update Email
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Update Password Modal -->
+<div id="updatePasswordModal" class="modal">
+    <form method="post" action="/NGO/UpdatePassword" class="modal-content">
+        <div class="modal-header">
+            <h2>🔒 Change Password</h2>
+            <span class="close" onclick="closeModal('updatePasswordModal')">×</span>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="currentPassword">Current Password *</label>
+                <input type="password"
+                       id="currentPassword"
+                       name="currentPassword"
+                       required
+                       placeholder="Enter current password">
+            </div>
+
+            <div class="form-group">
+                <label for="newPassword">New Password *</label>
+                <input type="password"
+                       id="newPassword"
+                       name="newPassword"
+                       required
+                       minlength="6"
+                       placeholder="Enter new password (min. 6 characters)">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm New Password *</label>
+                <input type="password"
+                       id="confirmPassword"
+                       name="confirmPassword"
+                       required
+                       minlength="6"
+                       placeholder="Re-enter new password">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('updatePasswordModal')">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+                🔒 Change Password
+            </button>
+        </div>
+    </form>
+</div>

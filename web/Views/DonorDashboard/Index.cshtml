@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Donor Dashboard";
+    var successMsg = TempData["Success"]?.ToString();
+    var errorMsg = TempData["Error"]?.ToString();
+    var justDonated = TempData["JustDonated"]?.ToString();
+}
+
+<link rel="stylesheet" href="~/css/DonorDashboard.css" />
+
+<div class="dashboard-wrapper">
+    <div>
+        @await Html.PartialAsync("_Sidebar")
+    </div>
+    <div class="main-content">
+        @await Html.PartialAsync("_Header")
+
+        @* ONLY SHOW SUCCESS IF IT CAME FROM A DONATION *@
+        @if (!string.IsNullOrEmpty(justDonated) && !string.IsNullOrEmpty(successMsg))
+        {
+            <div class="alert alert-success">
+                ✓ @successMsg
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(errorMsg))
+        {
+            <div class="alert alert-error">
+                ✗ @errorMsg
+            </div>
+        }
+
+        <div id="tabs">
+            @await Html.PartialAsync("_HomeTab")
+            @await Html.PartialAsync("_ProfileTab")
+            @await Html.PartialAsync("_FoodTab")
+            @await Html.PartialAsync("_ClothesTab")
+            @await Html.PartialAsync("_MoneyTab")
+            @await Html.PartialAsync("_HistoryTab")
+            @await Html.PartialAsync("_AboutTab")
+        </div>
+    </div>
+</div>
+
+<script src="~/js/DonorDashboard.js"></script>
+
+@if (!string.IsNullOrEmpty(justDonated))
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof showSuccessAnimation === 'function') {
+                    showSuccessAnimation('@justDonated');
+                }
+            }, 600);
+        });
+    </script>
+}

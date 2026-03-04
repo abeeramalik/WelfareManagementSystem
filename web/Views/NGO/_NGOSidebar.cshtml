@@ -1,0 +1,75 @@
+﻿<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>🏢 NGO Portal</h2>
+        <p>Welfare Donation System</p>
+    </div>
+
+    <div class="user-profile">
+        <div class="user-avatar">
+            <span style="font-size: 40px;">🏛️</span>
+        </div>
+        <div class="user-name">@ViewBag.OrganizationName</div>
+        <div class="user-type">
+            <span>🤝</span>
+            <span>Partner Organization</span>
+        </div>
+        @if (ViewBag.IsVerified)
+        {
+            <div class="verification-badge verified">
+                ✓ Verified Partner
+            </div>
+        }
+        else
+        {
+            <div class="verification-badge pending">
+                ⏳ Pending Verification
+            </div>
+        }
+    </div>
+
+    <nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active" onclick="showSection(event, 'home')">
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'donate')">
+                    <span class="nav-icon">💝</span>
+                    <span>Make Donation</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'requests')">
+                    <span class="nav-icon">📨</span>
+                    <span>Welfare Requests</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'history')">
+                    <span class="nav-icon">📊</span>
+                    <span>Donation History</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'profile')">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Profile Settings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="showSection(event, 'about')">
+                    <span class="nav-icon">ℹ️</span>
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="logout-section">
+        <a href="/UserLogin/Logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</aside>

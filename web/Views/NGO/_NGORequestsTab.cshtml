@@ -1,0 +1,159 @@
+﻿<!-- Welfare Requests Tab -->
+<div id="requests" class="content-card">
+    <h2 class="content-title">📨 Welfare Support Requests</h2>
+
+    <p style="color: var(--muted); margin-bottom: 20px; font-size: 15px;">
+        Review and respond to support requests from the welfare administration
+    </p>
+
+    <!-- Request Statistics -->
+    <div class="stats-card" style="margin-bottom: 30px;">
+        <div class="stat-item">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number">@(ViewBag.TotalRequests ?? 0)</div>
+            <div class="stat-label">Total Requests</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-number">@(ViewBag.PendingRequests ?? 0)</div>
+            <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">✓</div>
+            <div class="stat-number">@(ViewBag.AcceptedRequests ?? 0)</div>
+            <div class="stat-label">Accepted</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number">@(ViewBag.FulfilledRequests ?? 0)</div>
+            <div class="stat-label">Fulfilled</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">✗</div>
+            <div class="stat-number">@(ViewBag.RejectedRequests ?? 0)</div>
+            <div class="stat-label">Rejected</div>
+        </div>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="requestSearch"
+               placeholder="🔍 Search requests by type, status, or date..."
+               onkeyup="searchTable('requestSearch', 'requestsTable')">
+    </div>
+
+    @if (ViewBag.WelfareRequests != null && ViewBag.WelfareRequests.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>From Admin</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Details</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic req in ViewBag.WelfareRequests)
+                    {
+                        <tr>
+                            <td><strong>#@req.RequestId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@req.AdminName</strong>
+                            </td>
+                            <td>
+                                @if (req.Type == "Financial")
+                                {
+                                    <span style="font-size: 24px;">💰</span>
+                                }
+                                else if (req.Type == "Food")
+                                {
+                                    <span style="font-size: 24px;">🍲</span>
+                                }
+                                else if (req.Type == "Clothes")
+                                {
+                                    <span style="font-size: 24px;">👕</span>
+                                }
+                                else if (req.Type == "Shelter")
+                                {
+                                    <span style="font-size: 24px;">🏠</span>
+                                }
+                                <br>
+                                <strong>@req.Type</strong>
+                            </td>
+                            <td style="max-width: 250px;">
+                                <p style="margin: 0; word-wrap: break-word;">@req.Description</p>
+                            </td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@req.Details</strong>
+                            </td>
+                            <td>@req.RequestDate</td>
+                            <td>
+                                @if (req.Status == "Pending")
+                                {
+                                    <span class="status-badge status-pending">⏳ Pending</span>
+                                }
+                                else if (req.Status == "Accepted")
+                                {
+                                    <span class="status-badge status-approved">✓ Accepted</span>
+                                }
+                                else if (req.Status == "Fulfilled")
+                                {
+                                    <span class="status-badge status-fulfilled">✅ Fulfilled</span>
+                                }
+                                else if (req.Status == "Rejected")
+                                {
+                                    <span class="status-badge status-rejected">✗ Rejected</span>
+                                }
+                            </td>
+                            <td>
+                                @if (req.CanFulfill)
+                                {
+                                    <div class="action-btns">
+                                        <button class="btn btn-success btn-sm"
+                                                onclick="acceptRequest(@req.RequestId)">
+                                            ✓ Accept
+                                        </button>
+                                        <button class="btn btn-danger btn-sm"
+                                                onclick="rejectRequest(@req.RequestId)">
+                                            ✗ Reject
+                                        </button>
+                                        <button class="btn btn-primary btn-sm"
+                                                onclick="fulfillRequest(@req.RequestId)">
+                                            🎁 Fulfill
+                                        </button>
+                                    </div>
+                                }
+                                else if (req.Status == "Accepted")
+                                {
+                                    <button class="btn btn-primary btn-sm"
+                                            onclick="fulfillRequest(@req.RequestId)">
+                                        🎁 Fulfill Now
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span style="color: var(--muted); font-size: 12px;">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">📨</div>
+            <h3>No Welfare Requests</h3>
+            <p>You haven't received any support requests from the welfare administration yet</p>
+        </div>
+    }
+</div>

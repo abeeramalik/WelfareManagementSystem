@@ -1,0 +1,39 @@
+﻿<div id="history" class="content-card">
+    <h2 class="content-title">Your Request History</h2>
+
+    @if (ViewBag.RequestHistory != null && ((List<object>)ViewBag.RequestHistory).Count > 0)
+    {
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var request in (List<object>)ViewBag.RequestHistory)
+                {
+                    var r = (dynamic)request;
+                    var statusClass = "status-" + r.Status.ToString().ToLower();
+                    <tr>
+                        <td>#@r.RequestId</td>
+                        <td>@r.Date</td>
+                        <td>@r.Type</td>
+                        <td>@r.Details</td>
+                        <td><span class="status-badge @statusClass">@r.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="no-history">
+            <p style="font-size: 18px; margin-bottom: 10px;">📋 No requests yet</p>
+            <p>Start by submitting your first request for assistance!</p>
+        </div>
+    }
+</div>

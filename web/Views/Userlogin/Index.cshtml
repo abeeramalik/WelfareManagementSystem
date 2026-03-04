@@ -1,0 +1,387 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+    var currentLoginType = ViewBag.LoginType as string ?? "user";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success-fixed">@TempData["Success"]</div>
+}
+
+<div class="login-wrapper">
+    <div class="sidebar">
+        <h3>Login As</h3>
+        <button type="button" class="login-type-btn @(currentLoginType == "user" ? "active" : "")" data-type="user">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            User Login
+        </button>
+        <button type="button" class="login-type-btn @(currentLoginType == "admin" ? "active" : "")" data-type="admin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            Admin Login
+        </button>
+        <button type="button" class="login-type-btn @(currentLoginType == "ngo" ? "active" : "")" data-type="ngo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            NGO Login
+        </button>
+    </div>
+
+    <div class="logincontainer">
+        <form asp-action="Index" method="post">
+            <h2 id="login-title">@(currentLoginType == "admin" ? "Admin Login" : currentLoginType == "ngo" ? "NGO Login" : "User Login")</h2>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    @ViewBag.Error
+                </div>
+            }
+
+            <input type="hidden" id="loginType" name="LoginType" value="@currentLoginType">
+
+            <div class="input-group">
+                <label for="UserID">@(currentLoginType == "admin" ? "Admin ID" : currentLoginType == "ngo" ? "NGO ID" : "User ID")</label>
+                <input type="text" name="UserID" id="userIdInput" placeholder="@(currentLoginType == "admin" ? "Enter Admin ID" : currentLoginType == "ngo" ? "Enter NGO ID" : "Enter User ID")" required>
+            </div>
+            <div class="input-group">
+                <label for="Password">Password</label>
+                <input type="password" name="Password" id="passwordInput" placeholder="Enter Password" required>
+            </div>
+            <button type="submit">Login</button>
+            <div class="register-link" style='display:@(currentLoginType == "admin" || currentLoginType == "ngo" ? "none" : "block")'>
+                Don't have an account? <a asp-controller="UserLogin" asp-action="Register">Register here</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        color: #2d3436;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .login-wrapper {
+        display: flex;
+        gap: 30px;
+        align-items: stretch;
+    }
+
+    .sidebar {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        padding: 30px 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(58, 123, 213, 0.25);
+        border: 1px solid rgba(103, 126, 234, 0.2);
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .sidebar h3 {
+            color: #667eea;
+            margin: 0 0 25px 0;
+            text-align: center;
+            font-size: 19px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+    .login-type-btn {
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 14px;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.6);
+        color: #636e72;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        font-size: 15px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .login-type-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(103, 126, 234, 0.2), transparent);
+            transition: 0.7s;
+        }
+
+        .login-type-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-type-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #667eea;
+            color: #2d3436;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-type-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            transform: scale(1.05);
+        }
+
+        .login-type-btn svg {
+            flex-shrink: 0;
+            stroke: currentColor;
+        }
+
+    .logincontainer {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(14px);
+        width: 400px;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(58, 123, 213, 0.3);
+        border: 1px solid rgba(103, 126, 234, 0.3);
+    }
+
+        .logincontainer h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #667eea;
+            font-size: 28px;
+            text-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
+        }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2d3436;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+            .input-group input:focus {
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+                background: white;
+            }
+
+            .input-group input::placeholder {
+                color: #b2bec3;
+            }
+
+    button[type="submit"] {
+        width: 100%;
+        padding: 15px;
+        font-size: 17px;
+        font-weight: 600;
+        border: none;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.4s;
+        margin-top: 10px;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+        button[type="submit"]:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+        }
+
+    .register-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #636e72;
+        font-size: 14px;
+    }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .register-link a:hover {
+                color: #764ba2;
+                text-decoration: underline;
+            }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #fee, #fdd);
+        color: #c33;
+        border: 1px solid #fcc;
+        border-left: 5px solid #e74c3c;
+        padding: 14px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .alert-success-fixed {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 14px;
+        border-radius: 10px;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        min-width: 320px;
+        box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
+        animation: slideDown 0.5s ease-out;
+    }
+
+    @@keyframes slideIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes slideDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translate(-50%, -30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .login-wrapper
+
+    {
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .sidebar, .logincontainer {
+        width: 100%;
+    }
+
+    .alert-success-fixed {
+        min-width: 90%;
+    }
+
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.login-type-btn');
+        const loginTypeInput = document.getElementById('loginType');
+        const loginTitle = document.getElementById('login-title');
+        const userIdLabel = document.querySelector('label[for="UserID"]');
+        const userIdInput = document.getElementById('userIdInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const registerLink = document.querySelector('.register-link');
+
+        const titleMap = { user: 'User Login', admin: 'Admin Login', ngo: 'NGO Login' };
+        const idLabelMap = { user: 'User ID', admin: 'Admin ID', ngo: 'NGO ID' };
+        const placeholderMap = { user: 'Enter User ID', admin: 'Enter Admin ID', ngo: 'Enter NGO ID' };
+
+        function applyType(type) {
+            loginTypeInput.value = type;
+            loginTitle.textContent = titleMap[type];
+            userIdLabel.textContent = idLabelMap[type];
+            userIdInput.placeholder = placeholderMap[type];
+            registerLink.style.display = (type === 'admin' || type === 'ngo') ? 'none' : 'block';
+
+            // Clear input fields when switching login type
+            userIdInput.value = '';
+            passwordInput.value = '';
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                buttons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const type = this.dataset.type;
+                applyType(type);
+            });
+        });
+
+        // Initialize
+        applyType(loginTypeInput.value);
+
+        // Auto-hide success alert
+        const successAlert = document.querySelector('.alert-success-fixed');
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.opacity = '0';
+                setTimeout(() => successAlert.remove(), 400);
+            }, 5000);
+        }
+    });
+</script>

@@ -1,0 +1,135 @@
+﻿<!-- Admins Management Tab -->
+<div id="admins" class="content-card">
+    <div class="section-header">
+        <h2 class="content-title">👨‍💼 Admin Management</h2>
+        <button class="add-button" onclick="openModal('addAdminModal')">
+            ➕ Add New Admin
+        </button>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text"
+               id="adminSearch"
+               placeholder="🔍 Search admins by ID or name..."
+               onkeyup="searchTable('adminSearch', 'adminTable')">
+    </div>
+
+    <!-- Admins Table -->
+    @if (ViewBag.AllAdmins != null && ViewBag.AllAdmins.Count > 0)
+    {
+        <div class="table-container">
+            <table class="history-table" id="adminTable">
+                <thead>
+                    <tr>
+                        <th>Admin ID</th>
+                        <th>Full Name</th>
+                        <th>Date of Birth</th>
+                        <th>Age</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (dynamic admin in ViewBag.AllAdmins)
+                    {
+                        var dob = DateTime.Parse(admin.DateOfBirth);
+                        var age = DateTime.Now.Year - dob.Year;
+                        if (DateTime.Now < dob.AddYears(age)) age--;
+
+                        <tr>
+                            <td><strong>#@admin.AdminId</strong></td>
+                            <td>
+                                <strong style="color: var(--accent-start);">@admin.FullName</strong>
+                            </td>
+                            <td>@admin.DateOfBirth</td>
+                            <td>@age years</td>
+                            <td>
+                                <span class="status-badge status-active">✓ Active</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-history">
+            <div class="empty-icon">🛡️</div>
+            <h3>No Administrators Found</h3>
+            <p>Click the button above to add new admins</p>
+        </div>
+    }
+
+    <!-- Add Admin Modal -->
+    <div id="addAdminModal" class="modal">
+        <form method="post" action="/Admin/AddAdmin" class="modal-content">
+            <div class="modal-header">
+                <h2>➕ Add New Administrator</h2>
+                <span class="close" onclick="closeModal('addAdminModal')">×</span>
+            </div>
+            <div class="modal-body">
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="AdminId">Admin ID *</label>
+                    <input type="number"
+                           id="AdminId"
+                           name="AdminId"
+                           required
+                           min="100000"
+                           max="999999"
+                           placeholder="Enter 6-digit ID">
+                    <small style="color: var(--muted); font-size: 12px;">
+                        Must be a unique numeric identifier
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="FullName">Full Name *</label>
+                    <input type="text"
+                           id="FullName"
+                           name="FullName"
+                           required
+                           placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="AdminPassword">Password *</label>
+                    <input type="password"
+                           id="AdminPassword"
+                           name="Password"
+                           required
+                           minlength="6"
+                           placeholder="Enter secure password (min. 6 characters)">
+                    <small style="color: var(--muted); font-size: 12px;">
+                        Use a strong password with letters, numbers, and symbols
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="Dob">Date of Birth *</label>
+                    <input type="date"
+                           id="Dob"
+                           name="Dob"
+                           required
+                           max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")">
+                    <small style="color: var(--muted); font-size: 12px;">
+                        Admin must be at least 18 years old
+                    </small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('addAdminModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    ✓ Add Administrator
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

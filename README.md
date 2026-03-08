@@ -26,6 +26,24 @@ It ensures transparency, accountability, and structured data handling through a 
 - Bootstrap
 - JavaScript
 
+### **Screenshots**###
+
+![registration](https://github.com/user-attachments/assets/d514bff9-f177-459d-afa2-8d34b6aef0ed)
+<br><br>
+![Login](https://github.com/user-attachments/assets/1e53b3d1-7c4f-4117-9156-78fa9627cedc)
+<br><br>
+![admin](https://github.com/user-attachments/assets/efbb7a4f-45d5-446d-8d2b-ab6c5c7ab584)
+<br><br>
+<img width="975" height="456" alt="NGO (2)" src="https://github.com/user-attachments/assets/cca81e66-bc55-461d-a24e-51adc6c2524f" />
+<br><br>
+![donor](https://github.com/user-attachments/assets/d3938583-81ea-431d-9532-80ffcabc1440)
+  <br><br>
+![receiver](https://github.com/user-attachments/assets/39cfa94d-b9ab-4071-a0d2-fe2319f2356f)
+<br><br>
+###**Database View**###
+
+<img width="505" height="1047" alt="Database" src="https://github.com/user-attachments/assets/fa73f368-b9b9-469d-b56e-f4d56724adb9" />
+
 ### Backend
 - ASP.NET Core MVC
 - C#

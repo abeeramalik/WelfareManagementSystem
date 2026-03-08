@@ -61,7 +61,7 @@ It ensures transparency, accountability, and structured data handling through a 
 ![receiver](https://github.com/user-attachments/assets/39cfa94d-b9ab-4071-a0d2-fe2319f2356f)
 <br><br>
 
-###**Database View**###
+##**Database View**
 
 <img width="505" height="1047" alt="Database" src="https://github.com/user-attachments/assets/fa73f368-b9b9-469d-b56e-f4d56724adb9" />
 

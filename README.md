@@ -83,7 +83,7 @@ It ensures transparency, accountability, and structured data handling through a 
 1. Open `appsettings.json`
 2. Update the connection string according to your SQL Server instance:
 
-```json
+As json:
 "DefaultConnection": "Data Source=.\\SQLEXPRESS;Initial Catalog=WelfareDb;Integrated Security=True;Encrypt=False;TrustServerCertificate=True"
 
 3. Run Migrations
